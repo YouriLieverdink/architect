@@ -1,0 +1,10 @@
+settings:
+  code.create.directories: true
+
+code:
+  apicollective:
+    apibuilder-generator:
+      version: latest
+      generators:
+        - generator: dart_2_15_json
+          target: ./packages/shared/lib/src/generated/
