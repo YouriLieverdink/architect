@@ -5,8 +5,8 @@ export './generator/show_generator.dart';
 export './healthcheck/show_healthcheck.dart';
 export './invocation/add_invocation.dart';
 
-const listGenerators = CreateListGenerators([]);
-const showGenerator = CreateShowGenerator([]);
+const listGenerators = CreateListGenerators(generators);
+const showGenerator = CreateShowGenerator(generators);
 
 const showHealthcheck = CreateShowHealthcheck();
 

@@ -1,8 +1,8 @@
 import 'package:shared/shared.dart';
 
-class Context {
+class BuildContext {
   //
-  const Context({
+  const BuildContext({
     required this.namespace,
     required this.services,
   });
