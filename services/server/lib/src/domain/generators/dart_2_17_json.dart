@@ -1,8 +1,10 @@
 import 'package:shared/shared.dart';
 
-IoApibuilderGeneratorV0ModelsInvocation dart217Json(
-  IoApibuilderGeneratorV0ModelsInvocationForm form,
-) {
+class Dart217Json {
   //
-  throw UnimplementedError();
+  static IoApibuilderGeneratorV0ModelsInvocation invoke(
+    IoApibuilderGeneratorV0ModelsInvocationForm form,
+  ) {
+    throw UnimplementedError();
+  }
 }

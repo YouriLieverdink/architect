@@ -10,6 +10,6 @@ const generators = [
     description: 'Classes with toJson, fromJson, and copyWith methods.',
     language: 'dart',
     attributes: [],
-    invoke: dart217Json,
+    invoke: Dart217Json.invoke,
   ),
 ];
