@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json.schemastore.org/apibuilder.json",
+
+  "name": "farmhouse",
+  "base_url": "http://localhost:8000/",
+
+  "info": {
+    "contact": {
+      "name": "Youri Lieverdink",
+      "email": "lieverdink.youri@gmail.com"
+    }
+  },
+
+  "enums": {
+    "gender": {
+      "description": "The gender of an animal",
+      "values": [
+        {
+          "name": "male",
+          "description": "The male gender"
+        },
+        {
+          "name": "female",
+          "description": "The female gender"
+        },
+        {
+          "name": "both",
+          "description": "Both the male and female gender",
+          "deprecation": {
+            "description": "Use the 'other' gender instead"
+          }
+        },
+        {
+          "name": "other",
+          "description": "Any other gender"
+        }
+      ]
+    }
+  },
+
+  "models": {
+    "cat": {
+      "description": "An animal also known as a cat",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The name of the cat",
+          "example": "Pip"
+        },
+        {
+          "name": "gender",
+          "type": "gender",
+          "description": "The gender of the cat",
+          "example": "female"
+        },
+        {
+          "name": "hours_slept_today",
+          "type": "integer",
+          "example": "6",
+          "minimum": 0,
+          "maximum": 24,
+          "required": false
+        }
+      ]
+    },
+
+    "dog": {
+      "description": "An animal also known as a dog",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The name of the dog",
+          "example": "Felix"
+        },
+        {
+          "name": "gender",
+          "type": "gender",
+          "description": "The gender of the dog",
+          "example": "other"
+        },
+        {
+          "name": "balls_caught",
+          "type": "integer",
+          "example": "12",
+          "default": 0,
+          "minimum": 0
+        }
+      ]
+    },
+
+    "horse": {
+      "description": "An animal also known as a horse",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The name of the horse",
+          "example": "George"
+        },
+        {
+          "name": "gender",
+          "type": "gender",
+          "description": "The gender of the horse",
+          "example": "male"
+        }
+      ],
+      "deprecation": {
+        "description": "We don't have horses anymore"
+      }
+    }
+  },
+
+  "unions": {
+    "animal": {
+      "description": "Either a cat, dog, or a horse",
+      "types": [
+        {
+          "type": "cat"
+        },
+        {
+          "type": "dog"
+        },
+        {
+          "type": "horse"
+        }
+      ]
+    }
+  }
+}

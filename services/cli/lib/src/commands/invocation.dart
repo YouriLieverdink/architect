@@ -23,7 +23,7 @@ class InvocationCommand extends Command {
     }
 
     try {
-      final json = await File('./assets/form.json').readAsJson();
+      final json = await File('../../assets/form.json').readAsJson();
       final form = IoApibuilderGeneratorV0ModelsInvocationForm.fromJson(json);
 
       final data = await client.invocations.postByKey(form, key: key);
