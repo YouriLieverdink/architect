@@ -17,7 +17,7 @@ class BuildContext {
         .first;
   }
 
-  Set<String> types(
+  Set<String> _types(
     String kind,
   ) {
     switch (kind) {
@@ -44,8 +44,9 @@ class BuildContext {
     if (namespace == null) {
       // Check whether it's a model, enum, or union type.
       for (final kind in ['models', 'enums', 'unions']) {
-        //
-        if (types(kind).contains(value)) {
+        final base = getBaseTypeName(value);
+
+        if (_types(kind).contains(base)) {
           final type = Type.of(value, kind: kind, isNullable: isNullable);
 
           return Definition(
@@ -56,10 +57,9 @@ class BuildContext {
         }
       }
 
-      // Will resolved to an unknown type.
       return Definition(
         this.namespace,
-        Type.of('', isNullable: isNullable),
+        Type.of(value, isNullable: isNullable),
         isLocal: true,
       );
     }
