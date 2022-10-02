@@ -21,8 +21,6 @@ class CreateAddInvocation {
       return generator.build(form);
     } //
     catch (e) {
-      print(e);
-
       throw IoApibuilderGeneratorV0ModelsError(
         code: 'invocation-error',
         message: e.toString(),
