@@ -3,7 +3,7 @@ import 'package:shared/shared.dart';
 
 extension BuildDeserializer on Definition {
   //
-  Element deserializer(
+  Builder deserializer(
     String name,
   ) {
     return buildDeserializer(
@@ -15,7 +15,7 @@ extension BuildDeserializer on Definition {
   }
 }
 
-Element buildDeserializer(
+Builder buildDeserializer(
   String name,
   String namespace,
   Type type, {
