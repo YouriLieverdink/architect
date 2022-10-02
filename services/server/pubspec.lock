@@ -210,7 +210,7 @@ packages:
       name: orchestrator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.4.0"
   package_config:
     dependency: transitive
     description:
@@ -240,7 +240,7 @@ packages:
     source: hosted
     version: "2.1.1"
   recase:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: recase
       url: "https://pub.dartlang.org"

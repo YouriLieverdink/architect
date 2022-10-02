@@ -18,9 +18,11 @@ class CreateAddInvocation {
     final generator = await showGenerator(key);
 
     try {
-      return generator.invoke(form);
+      return generator.build(form);
     } //
     catch (e) {
+      print(e);
+
       throw IoApibuilderGeneratorV0ModelsError(
         code: 'invocation-error',
         message: e.toString(),
