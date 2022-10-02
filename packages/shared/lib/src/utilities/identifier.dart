@@ -19,7 +19,7 @@ String escapeIfKeyword(
 }
 
 /// Returns an camel case identifier.
-String getIdentifier(
+String getName(
   String value,
 ) {
   return escapeIfKeyword(value.camelCase);

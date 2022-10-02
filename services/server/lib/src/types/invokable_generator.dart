@@ -8,10 +8,10 @@ class InvokableGenerator extends IoApibuilderGeneratorV0ModelsGenerator {
     super.language,
     super.description,
     required super.attributes,
-    required this.invoke,
+    required this.build,
   });
 
   final IoApibuilderGeneratorV0ModelsInvocation Function(
     IoApibuilderGeneratorV0ModelsInvocationForm form,
-  ) invoke;
+  ) build;
 }

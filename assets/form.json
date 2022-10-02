@@ -1,131 +1,1983 @@
 {
-  "$schema": "https://json.schemastore.org/apibuilder.json",
-
-  "name": "farmhouse",
-  "base_url": "http://localhost:8000/",
-
-  "info": {
-    "contact": {
-      "name": "Youri Lieverdink",
-      "email": "lieverdink.youri@gmail.com"
-    }
-  },
-
-  "enums": {
-    "gender": {
-      "description": "The gender of an animal",
-      "values": [
-        {
-          "name": "male",
-          "description": "The male gender"
+  "service": {
+    "apidoc": {
+      "version": "0.15.70"
+    },
+    "name": "apibuilder generator",
+    "organization": {
+      "key": "apicollective"
+    },
+    "application": {
+      "key": "apibuilder-generator"
+    },
+    "namespace": "io.apibuilder.generator.v0",
+    "version": "0.15.70",
+    "info": {
+      "license": {
+        "name": "MIT",
+        "url": "http://opensource.org/licenses/MIT"
+      },
+      "contact": {
+        "name": "Michael Bryzek",
+        "url": "http://twitter.com/mbryzek",
+        "email": "mbryzek@alum.mit.edu"
+      }
+    },
+    "headers": [],
+    "imports": [
+      {
+        "uri": "https://app.apibuilder.io/apicollective/apibuilder-common/latest/service.json",
+        "namespace": "io.apibuilder.common.v0",
+        "organization": {
+          "key": "apicollective"
         },
-        {
-          "name": "female",
-          "description": "The female gender"
+        "application": {
+          "key": "apibuilder-common"
         },
-        {
-          "name": "both",
-          "description": "Both the male and female gender",
-          "deprecation": {
-            "description": "Use the 'other' gender instead"
+        "version": "0.15.70",
+        "enums": [],
+        "interfaces": [],
+        "unions": [],
+        "models": ["audit", "healthcheck", "reference", "reference_guid"],
+        "annotations": []
+      },
+      {
+        "uri": "https://app.apibuilder.io/apicollective/apibuilder-spec/latest/service.json",
+        "namespace": "io.apibuilder.spec.v0",
+        "organization": {
+          "key": "apicollective"
+        },
+        "application": {
+          "key": "apibuilder-spec"
+        },
+        "version": "0.15.70",
+        "enums": ["method", "parameter_location", "response_code_option"],
+        "interfaces": [],
+        "unions": ["response_code"],
+        "models": [
+          "annotation",
+          "apidoc",
+          "application",
+          "attribute",
+          "body",
+          "contact",
+          "deprecation",
+          "enum",
+          "enum_value",
+          "field",
+          "header",
+          "import",
+          "info",
+          "interface",
+          "license",
+          "model",
+          "operation",
+          "organization",
+          "parameter",
+          "resource",
+          "response",
+          "service",
+          "union",
+          "union_type"
+        ],
+        "annotations": []
+      }
+    ],
+    "enums": [
+      {
+        "name": "file_flag",
+        "plural": "file_flags",
+        "values": [
+          {
+            "name": "scaffolding",
+            "attributes": [],
+            "description": "Indicates files that an end user starts from but should edit. Not intended to be the final product (see: https://stackoverflow.com/questions/235018/what-is-scaffolding-is-it-a-term-for-a-particular-platform). Consider not overwriting these files when code is re-generated."
           }
-        },
-        {
-          "name": "other",
-          "description": "Any other gender"
-        }
-      ]
-    }
+        ],
+        "attributes": [],
+        "description": "Allows generator authors to flag files with special characteristics. It is up to the client (i.e. the cli) to decide how to interpret them."
+      }
+    ],
+    "interfaces": [],
+    "unions": [],
+    "models": [
+      {
+        "name": "attribute",
+        "plural": "attributes",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "value",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": []
+          }
+        ],
+        "attributes": [],
+        "interfaces": [],
+        "description": "An attribute represents a key/value pair that is optionally used to provide additional instructions / data to the code generator. An example could be an attribute to specify the root import path for a go client.."
+      },
+      {
+        "name": "error",
+        "plural": "errors",
+        "fields": [
+          {
+            "name": "code",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "Machine readable code for this specific error message"
+          },
+          {
+            "name": "message",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "Description of the error"
+          }
+        ],
+        "attributes": [],
+        "interfaces": []
+      },
+      {
+        "name": "file",
+        "plural": "files",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "The recommended name for the file.",
+            "example": "ApiCollectiveApiBuilderApiClient.scala"
+          },
+          {
+            "name": "dir",
+            "type": "string",
+            "required": false,
+            "attributes": [],
+            "annotations": [],
+            "description": "The recommended directory path for the file where appropriate.",
+            "example": "io/apicollective/apibuilder"
+          },
+          {
+            "name": "contents",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "The actual source code."
+          },
+          {
+            "name": "flags",
+            "type": "[file_flag]",
+            "required": false,
+            "attributes": [],
+            "annotations": []
+          }
+        ],
+        "attributes": [],
+        "interfaces": [],
+        "description": "Represents a source file"
+      },
+      {
+        "name": "generator",
+        "plural": "generators",
+        "fields": [
+          {
+            "name": "key",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "language",
+            "type": "string",
+            "required": false,
+            "attributes": [],
+            "annotations": [],
+            "description": "A comma separate list of the programming language(s) that this generator produces",
+            "example": "scala"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "required": false,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "attributes",
+            "type": "[string]",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "The list of attributes that this code generator can use. You can find the full list of available attributes and their descriptions at http://apibuilder.io/doc/attributes",
+            "default": "[]"
+          }
+        ],
+        "attributes": [],
+        "interfaces": [],
+        "description": "The generator metadata."
+      },
+      {
+        "name": "healthcheck",
+        "plural": "healthchecks",
+        "fields": [
+          {
+            "name": "status",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "example": "healthy"
+          }
+        ],
+        "attributes": [],
+        "interfaces": []
+      },
+      {
+        "name": "invocation",
+        "plural": "invocations",
+        "fields": [
+          {
+            "name": "source",
+            "type": "string",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "The actual source code.",
+            "deprecation": {
+              "description": "Use files instead"
+            }
+          },
+          {
+            "name": "files",
+            "type": "[file]",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "description": "A collection of source files"
+          }
+        ],
+        "attributes": [],
+        "interfaces": [],
+        "description": "The result of invoking a generator."
+      },
+      {
+        "name": "invocation_form",
+        "plural": "invocation_forms",
+        "fields": [
+          {
+            "name": "service",
+            "type": "io.apibuilder.spec.v0.models.service",
+            "required": true,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "attributes",
+            "type": "[attribute]",
+            "required": true,
+            "attributes": [],
+            "annotations": [],
+            "default": "[]"
+          },
+          {
+            "name": "user_agent",
+            "type": "string",
+            "required": false,
+            "attributes": [],
+            "annotations": []
+          },
+          {
+            "name": "imported_services",
+            "type": "[io.apibuilder.spec.v0.models.service]",
+            "required": false,
+            "attributes": [],
+            "annotations": []
+          }
+        ],
+        "attributes": [],
+        "interfaces": [],
+        "description": "The invocation form is the payload send to the code generators when requesting generation of client code."
+      }
+    ],
+    "resources": [
+      {
+        "type": "generator",
+        "plural": "generators",
+        "operations": [
+          {
+            "method": "GET",
+            "path": "/generators",
+            "parameters": [
+              {
+                "name": "key",
+                "type": "string",
+                "location": "Query",
+                "required": false,
+                "description": "Filter generators with this key"
+              },
+              {
+                "name": "limit",
+                "type": "integer",
+                "location": "Query",
+                "required": true,
+                "description": "The number of records to return",
+                "default": "100",
+                "minimum": 0
+              },
+              {
+                "name": "offset",
+                "type": "integer",
+                "location": "Query",
+                "required": true,
+                "description": "Used to paginate. First page of results is 0.",
+                "default": "0",
+                "minimum": 0
+              }
+            ],
+            "responses": [
+              {
+                "code": {
+                  "integer": {
+                    "value": 200
+                  }
+                },
+                "type": "[generator]",
+                "attributes": []
+              }
+            ],
+            "attributes": [],
+            "description": "Get all available generators"
+          },
+          {
+            "method": "GET",
+            "path": "/generators/:key",
+            "parameters": [
+              {
+                "name": "key",
+                "type": "string",
+                "location": "Path",
+                "required": true
+              }
+            ],
+            "responses": [
+              {
+                "code": {
+                  "integer": {
+                    "value": 200
+                  }
+                },
+                "type": "generator",
+                "attributes": []
+              },
+              {
+                "code": {
+                  "integer": {
+                    "value": 404
+                  }
+                },
+                "type": "unit",
+                "attributes": []
+              }
+            ],
+            "attributes": [],
+            "description": "Get generator with this key"
+          }
+        ],
+        "attributes": [],
+        "path": "/generators"
+      },
+      {
+        "type": "healthcheck",
+        "plural": "healthchecks",
+        "operations": [
+          {
+            "method": "GET",
+            "path": "/_internal_/healthcheck",
+            "parameters": [],
+            "responses": [
+              {
+                "code": {
+                  "integer": {
+                    "value": 200
+                  }
+                },
+                "type": "healthcheck",
+                "attributes": []
+              }
+            ],
+            "attributes": []
+          }
+        ],
+        "attributes": [],
+        "path": "/_internal_/healthcheck"
+      },
+      {
+        "type": "invocation",
+        "plural": "invocations",
+        "operations": [
+          {
+            "method": "POST",
+            "path": "/invocations/:key",
+            "parameters": [
+              {
+                "name": "key",
+                "type": "string",
+                "location": "Path",
+                "required": true
+              }
+            ],
+            "responses": [
+              {
+                "code": {
+                  "integer": {
+                    "value": 200
+                  }
+                },
+                "type": "invocation",
+                "attributes": []
+              },
+              {
+                "code": {
+                  "integer": {
+                    "value": 409
+                  }
+                },
+                "type": "[error]",
+                "attributes": []
+              }
+            ],
+            "attributes": [],
+            "description": "Invoke a generator",
+            "body": {
+              "type": "invocation_form",
+              "attributes": []
+            }
+          }
+        ],
+        "attributes": [],
+        "path": "/invocations"
+      }
+    ],
+    "attributes": [],
+    "annotations": [],
+    "base_url": "https://api.apibuilder.io",
+    "description": "Documentation for an apibuilder code generator API"
   },
-
-  "models": {
-    "cat": {
-      "description": "An animal also known as a cat",
-      "fields": [
-        {
-          "name": "name",
-          "type": "string",
-          "description": "The name of the cat",
-          "example": "Pip"
+  "attributes": [],
+  "user_agent": "apibuilder 0.15.33 app.apibuilder.io/apicollective/apibuilder-generator/latest",
+  "imported_services": [
+    {
+      "apidoc": {
+        "version": "0.15.70"
+      },
+      "name": "apibuilder common",
+      "organization": {
+        "key": "apicollective"
+      },
+      "application": {
+        "key": "apibuilder-common"
+      },
+      "namespace": "io.apibuilder.common.v0",
+      "version": "0.15.70",
+      "info": {
+        "license": {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
         },
-        {
-          "name": "gender",
-          "type": "gender",
-          "description": "The gender of the cat",
-          "example": "female"
-        },
-        {
-          "name": "hours_slept_today",
-          "type": "integer",
-          "example": "6",
-          "minimum": 0,
-          "maximum": 24,
-          "required": false
+        "contact": {
+          "name": "Michael Bryzek",
+          "url": "http://twitter.com/mbryzek",
+          "email": "mbryzek@alum.mit.edu"
         }
-      ]
-    },
-
-    "dog": {
-      "description": "An animal also known as a dog",
-      "fields": [
+      },
+      "headers": [],
+      "imports": [],
+      "enums": [],
+      "interfaces": [],
+      "unions": [],
+      "models": [
         {
-          "name": "name",
-          "type": "string",
-          "description": "The name of the dog",
-          "example": "Felix"
+          "name": "audit",
+          "plural": "audits",
+          "fields": [
+            {
+              "name": "created_at",
+              "type": "date-time-iso8601",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "created_by",
+              "type": "reference_guid",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "updated_at",
+              "type": "date-time-iso8601",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "updated_by",
+              "type": "reference_guid",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
         },
         {
-          "name": "gender",
-          "type": "gender",
-          "description": "The gender of the dog",
-          "example": "other"
+          "name": "healthcheck",
+          "plural": "healthchecks",
+          "fields": [
+            {
+              "name": "status",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "example": "healthy"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
         },
         {
-          "name": "balls_caught",
-          "type": "integer",
-          "example": "12",
-          "default": 0,
-          "minimum": 0
-        }
-      ]
-    },
-
-    "horse": {
-      "description": "An animal also known as a horse",
-      "fields": [
-        {
-          "name": "name",
-          "type": "string",
-          "description": "The name of the horse",
-          "example": "George"
+          "name": "reference",
+          "plural": "references",
+          "fields": [
+            {
+              "name": "guid",
+              "type": "uuid",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "key",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Represents a reference to another model."
         },
         {
-          "name": "gender",
-          "type": "gender",
-          "description": "The gender of the horse",
-          "example": "male"
+          "name": "reference_guid",
+          "plural": "reference_guids",
+          "fields": [
+            {
+              "name": "guid",
+              "type": "uuid",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
         }
       ],
-      "deprecation": {
-        "description": "We don't have horses anymore"
-      }
-    }
-  },
-
-  "unions": {
-    "animal": {
-      "description": "Either a cat, dog, or a horse",
-      "types": [
-        {
-          "type": "cat"
+      "resources": [],
+      "attributes": [],
+      "annotations": [],
+      "description": "Models in common across various APIs in apibuilder"
+    },
+    {
+      "apidoc": {
+        "version": "0.15.70"
+      },
+      "name": "apibuilder spec",
+      "organization": {
+        "key": "apicollective"
+      },
+      "application": {
+        "key": "apibuilder-spec"
+      },
+      "namespace": "io.apibuilder.spec.v0",
+      "version": "0.15.70",
+      "info": {
+        "license": {
+          "name": "MIT",
+          "url": "http://opensource.org/licenses/MIT"
         },
-        {
-          "type": "dog"
-        },
-        {
-          "type": "horse"
+        "contact": {
+          "name": "Michael Bryzek",
+          "url": "http://twitter.com/mbryzek",
+          "email": "mbryzek@alum.mit.edu"
         }
-      ]
+      },
+      "headers": [],
+      "imports": [],
+      "enums": [
+        {
+          "name": "method",
+          "plural": "methods",
+          "values": [
+            {
+              "name": "GET",
+              "attributes": []
+            },
+            {
+              "name": "POST",
+              "attributes": []
+            },
+            {
+              "name": "PUT",
+              "attributes": []
+            },
+            {
+              "name": "PATCH",
+              "attributes": []
+            },
+            {
+              "name": "DELETE",
+              "attributes": []
+            },
+            {
+              "name": "HEAD",
+              "attributes": []
+            },
+            {
+              "name": "CONNECT",
+              "attributes": []
+            },
+            {
+              "name": "OPTIONS",
+              "attributes": []
+            },
+            {
+              "name": "TRACE",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        },
+        {
+          "name": "parameter_location",
+          "plural": "parameter_locations",
+          "values": [
+            {
+              "name": "Path",
+              "attributes": []
+            },
+            {
+              "name": "Query",
+              "attributes": []
+            },
+            {
+              "name": "Form",
+              "attributes": []
+            },
+            {
+              "name": "Header",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        },
+        {
+          "name": "response_code_option",
+          "plural": "response_code_options",
+          "values": [
+            {
+              "name": "Default",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        }
+      ],
+      "interfaces": [],
+      "unions": [
+        {
+          "name": "response_code",
+          "plural": "response_codes",
+          "types": [
+            {
+              "type": "integer",
+              "attributes": [],
+              "description": "Documents an HTTP status code (e.g. 200, 409, etc.)",
+              "discriminator_value": "integer"
+            },
+            {
+              "type": "response_code_option",
+              "attributes": [],
+              "description": "An individual operation can specify a response code of default to handle all other response codes. This is most useful for providing consistent error handling from an operation.",
+              "discriminator_value": "response_code_option"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        }
+      ],
+      "models": [
+        {
+          "name": "annotation",
+          "plural": "annotations",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Used to indicate an API concern for a field that is specific to the field's usage but not necessarily its data type. For example, you might use annotations to mark that certain fields contain PII or PCI data and thus should not be stored once processing is complete. Annotations communicate meaning to consumers of an API and may also be used within an implementation or tooling; for example, using static analysis tools to detect logging of sensitive data."
+        },
+        {
+          "name": "apidoc",
+          "plural": "apidocs",
+          "fields": [
+            {
+              "name": "version",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "example": "1.0.3"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "application",
+          "plural": "applications",
+          "fields": [
+            {
+              "name": "key",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Unique key identifying this application"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "attribute",
+          "plural": "attributes",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "value",
+              "type": "object",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Represents an additional attribute that is attached to one of the objects in apibuilder. The main use case is to capture additional metadata that doesn't necessarily define the API but aids in code generation. Examples would be hints for certain code generators about classes to extend, interfaces to implement, annotations to add, names to assign to certain methods, etc. The specific attributes will be applicable only in the context of the specific code generators usings them."
+        },
+        {
+          "name": "body",
+          "plural": "bodies",
+          "fields": [
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "contact",
+          "plural": "contacts",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "example": "Michael Bryzek"
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "example": "https://www.apibuilder.io"
+            },
+            {
+              "name": "email",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "example": "michael@test.apibuilder.io"
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Describes the primary contact for this service"
+        },
+        {
+          "name": "deprecation",
+          "plural": "deprecations",
+          "fields": [
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Indicates that this particular element is considered deprecated in the API. See the description for details"
+        },
+        {
+          "name": "enum",
+          "plural": "enums",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "plural",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "values",
+              "type": "[enum_value]",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "enum_value",
+          "plural": "enum_values",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "description": "The actual string representation of this value. If not specified, defaults to 'name'"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "field",
+          "plural": "fields",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "default",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "minimum",
+              "type": "long",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "maximum",
+              "type": "long",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "example",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "annotations",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "header",
+          "plural": "headers",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "default",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "import",
+          "plural": "imports",
+          "fields": [
+            {
+              "name": "uri",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Full URI to the service.json file of the service we are importing",
+              "example": "https://www.apibuilder.io/apicollective/apibuilder-spec/0.7.38/service.json"
+            },
+            {
+              "name": "namespace",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "the fully qualified namespace that we have imported",
+              "example": "io.apibuilder"
+            },
+            {
+              "name": "organization",
+              "type": "organization",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "application",
+              "type": "application",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "The version of the service that we are importing",
+              "example": "1.0.0"
+            },
+            {
+              "name": "enums",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Enums made available by this import",
+              "default": "[]"
+            },
+            {
+              "name": "interfaces",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Interfaces made available by this import",
+              "default": "[]"
+            },
+            {
+              "name": "unions",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Unions made available by this import",
+              "default": "[]"
+            },
+            {
+              "name": "models",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Models made available by this import",
+              "default": "[]"
+            },
+            {
+              "name": "annotations",
+              "type": "[annotation]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Annotations made available by this import",
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "An import is used to declare a dependency on another application. This allows you to reference the models and or enums from that application in your own app."
+        },
+        {
+          "name": "info",
+          "plural": "infoes",
+          "fields": [
+            {
+              "name": "license",
+              "type": "license",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "contact",
+              "type": "contact",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "General metadata about this service"
+        },
+        {
+          "name": "interface",
+          "plural": "interfaces",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "plural",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "fields",
+              "type": "[field]",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "license",
+          "plural": "licenses",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "example": "MIT"
+            },
+            {
+              "name": "url",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "example": "http://opensource.org/licenses/MIT"
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Describes the software license contact for this service"
+        },
+        {
+          "name": "model",
+          "plural": "models",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "plural",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "fields",
+              "type": "[field]",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "interfaces",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "operation",
+          "plural": "operations",
+          "fields": [
+            {
+              "name": "method",
+              "type": "method",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "path",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "The full path to this operation, relative to the service's base url."
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "body",
+              "type": "body",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "parameters",
+              "type": "[parameter]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "responses",
+              "type": "[response]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "organization",
+          "plural": "organizations",
+          "fields": [
+            {
+              "name": "key",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Unique key identifying the organization that owns this service"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "parameter",
+          "plural": "parameters",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "location",
+              "type": "parameter_location",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "default",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "minimum",
+              "type": "long",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "maximum",
+              "type": "long",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "example",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "resource",
+          "plural": "resources",
+          "fields": [
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "The type of this resource will map to a defined model, enum, or union type"
+            },
+            {
+              "name": "plural",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "path",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "description": "The path to this specific resource. This was added in 2016 to help us differentiate between the resource path and the operation path which can be helpful when, for example, generating method names for operations. This field is optional as some of our input formats (e.g. swagger) do not explicitly differentiate resoure paths."
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "operations",
+              "type": "[operation]",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "response",
+          "plural": "responses",
+          "fields": [
+            {
+              "name": "code",
+              "type": "response_code",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "headers",
+              "type": "[header]",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "service",
+          "plural": "services",
+          "fields": [
+            {
+              "name": "apidoc",
+              "type": "apidoc",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Documents that this is an apibuilder document, noting the specific version used. Internally the version is then used for backwards compatibility when applicable as new features are added to apibuilder. Note naming refers to the original name of this project, 'apidoc', and is left here to avoid a breaking change for preexisting services."
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "organization",
+              "type": "organization",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "application",
+              "type": "application",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "namespace",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "Fully qualified namespace for this service",
+              "example": "io.apibuilder"
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "example": "1.0.0"
+            },
+            {
+              "name": "base_url",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "info",
+              "type": "info",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "headers",
+              "type": "[header]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "imports",
+              "type": "[import]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "enums",
+              "type": "[enum]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "interfaces",
+              "type": "[interface]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "unions",
+              "type": "[union]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "models",
+              "type": "[model]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "resources",
+              "type": "[resource]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "annotations",
+              "type": "[annotation]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "union",
+          "plural": "unions",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "plural",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "discriminator",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "description": "If a type discriminator is provided, serialization of these union types will always contain a field named with the value of the discriminator that will contain the name of the type. This provides a simpler (for many use cases) JSON serialization/deserialization mechanism. When specified, apibuilder itself will verify that none of the types in the union type itself contain a field with the same name as the discriminator",
+              "example": "discriminator or type"
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "types",
+              "type": "[union_type]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "The names of the types that make up this union type",
+              "minimum": 1
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "interfaces",
+              "type": "[string]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            }
+          ],
+          "attributes": [],
+          "interfaces": []
+        },
+        {
+          "name": "union_type",
+          "plural": "union_types",
+          "fields": [
+            {
+              "name": "type",
+              "type": "string",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "description": "The name of a type (a primitive, model name, or enum name) that makes up this union type"
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "deprecation",
+              "type": "deprecation",
+              "required": false,
+              "attributes": [],
+              "annotations": []
+            },
+            {
+              "name": "attributes",
+              "type": "[attribute]",
+              "required": true,
+              "attributes": [],
+              "annotations": [],
+              "default": "[]"
+            },
+            {
+              "name": "default",
+              "type": "boolean",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "description": "If true, indicates that this type should be used as the default when deserializing union types. This field is only used by union types that require a discriminator and sets the default value for that discriminator during deserialization."
+            },
+            {
+              "name": "discriminator_value",
+              "type": "string",
+              "required": false,
+              "attributes": [],
+              "annotations": [],
+              "description": "The discriminator value defines the string to use in the discriminator field to identify this type. If not specified, the discriminator value will default to the name of the type itself."
+            }
+          ],
+          "attributes": [],
+          "interfaces": [],
+          "description": "Metadata about one of the types that is part of a union type"
+        }
+      ],
+      "resources": [],
+      "attributes": [],
+      "annotations": [],
+      "description": "Specification of apibuilder api.json schema"
     }
-  }
+  ]
 }

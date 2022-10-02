@@ -6,7 +6,7 @@ dependencies:
   {
     dart_style: ^2.2.4,
     equatable: ^2.0.5,
-    orchestrator: ^2.2.0,
+    orchestrator: ^2.4.0,
     recase: ^4.1.0,
     sealed_unions: ^3.0.3+1,
   }

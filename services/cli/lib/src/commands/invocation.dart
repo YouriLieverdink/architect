@@ -30,7 +30,7 @@ class InvocationCommand extends Command {
 
       // Output the files.
       for (final file in data.files) {
-        final path = './generated/${file.dir ?? ''}/${file.name}';
+        final path = '../../generated/${file.dir ?? ''}/${file.name}';
 
         File(path)
           ..createOrOverwriteSync(recursive: true)

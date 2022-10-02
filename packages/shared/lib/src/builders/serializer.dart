@@ -3,7 +3,7 @@ import 'package:shared/shared.dart';
 
 extension BuildSerializer on Definition {
   //
-  Element serializer(
+  Builder serializer(
     String name,
   ) {
     return buildSerializer(
@@ -15,7 +15,7 @@ extension BuildSerializer on Definition {
   }
 }
 
-Element buildSerializer(
+Builder buildSerializer(
   String name,
   String namespace,
   Type type, {
