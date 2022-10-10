@@ -5,6 +5,14 @@ export './generators/generators.dart';
 
 const generators = [
   InvokableGenerator(
+    key: 'dart_2_17_client',
+    name: 'Dart 2.17 client',
+    description: 'An http client for every defined operation.',
+    language: 'dart',
+    attributes: [],
+    build: buildDart217Client,
+  ),
+  InvokableGenerator(
     key: 'dart_2_17_json',
     name: 'Dart 2.17 json',
     description: 'Classes with toJson, fromJson, and copyWith methods.',

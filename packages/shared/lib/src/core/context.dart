@@ -5,11 +5,14 @@ class BuildContext {
   const BuildContext({
     required this.namespace,
     required this.services,
+    this.isLocal = true,
   });
 
   final String namespace;
 
   final List<IoApibuilderSpecV0ModelsService> services;
+
+  final bool isLocal;
 
   IoApibuilderSpecV0ModelsService get service {
     return services //
@@ -52,7 +55,7 @@ class BuildContext {
           return Definition(
             this.namespace,
             type,
-            isLocal: true,
+            isLocal: isLocal,
           );
         }
       }
@@ -60,7 +63,7 @@ class BuildContext {
       return Definition(
         this.namespace,
         Type.of(value, isNullable: isNullable),
-        isLocal: true,
+        isLocal: isLocal,
       );
     }
 
