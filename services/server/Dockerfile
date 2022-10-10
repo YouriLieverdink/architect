@@ -23,4 +23,6 @@ COPY --from=between /usr/app/services/server/bin/server /usr/app/bin/
 
 ENV SHELF_HOTRELOAD=false
 
+EXPOSE 8080
+
 CMD [ "/usr/app/bin/server" ]
