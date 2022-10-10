@@ -123,6 +123,7 @@ Class buildModel(
     }(),
     methods: [
       buildModelToJson(context, model),
+      buildCopyWith(context, model),
       buildModelProps(context, model),
     ],
   );
@@ -222,6 +223,54 @@ Method buildModelToJson(
       }
 
       return LiteralMap(arguments) //
+          .returned
+          .statement;
+    }(),
+  );
+}
+
+Method buildCopyWith(
+  BuildContext context,
+  IoApibuilderSpecV0ModelsModel model,
+) {
+  final modelDef = context.find(model.name);
+
+  return Method(
+    name: 'copyWith',
+    returns: modelDef.reference,
+    parameters: () sync* {
+      //
+      for (final v in model.fields) {
+        final name = getName(v.name);
+        final fieldDef = context.find(
+          v.type,
+          isNullable: true,
+        );
+
+        yield Parameter(
+          name: name,
+          type: fieldDef.reference,
+          kind: ParameterKind.named,
+        );
+      }
+    }(),
+    body: () {
+      //
+      final List<Builder> arguments = [];
+
+      for (final v in model.fields) {
+        final name = getName(v.name);
+
+        arguments.add(
+          Static(name) //
+              .ifNullThen(const Static('this').property(name))
+              .named(name),
+        );
+      }
+
+      return modelDef //
+          .reference
+          .invoke(arguments)
           .returned
           .statement;
     }(),
