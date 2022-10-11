@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:args/command_runner.dart';
 import 'package:cli/cli.dart';
@@ -23,8 +23,8 @@ class InvocationCommand extends Command {
     }
 
     try {
-      final json = await File('../../assets/form.json').readAsJson();
-      final form = IoApibuilderGeneratorV0ModelsInvocationForm.fromJson(json);
+      final json = await io.File('../../assets/form.json').readAsJson();
+      final form = InvocationForm.fromJson(json);
 
       final data = await client.invocations.postByKey(form, key: key);
 
@@ -32,13 +32,13 @@ class InvocationCommand extends Command {
       for (final file in data.files) {
         final path = '../../generated/${file.dir ?? ''}/${file.name}';
 
-        File(path)
+        io.File(path)
           ..createOrOverwriteSync(recursive: true)
           ..writeAsStringSync(file.contents);
       }
     } //
     catch (e) {
-      stderr.writeln(e);
+      io.stderr.writeln(e);
     }
   }
 }

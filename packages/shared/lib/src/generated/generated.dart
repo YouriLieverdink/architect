@@ -1,1 +1,1 @@
-export './io_apibuilder_generator_v0_json.dart';
+export './io_apibuilder_spec_v0_json.dart';

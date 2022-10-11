@@ -1,5 +1,4 @@
 import 'package:server/server.dart';
-import 'package:shared/shared.dart';
 
 class CreateAddInvocation {
   //
@@ -11,9 +10,9 @@ class CreateAddInvocation {
     String key,
   ) showGenerator;
 
-  Future<IoApibuilderGeneratorV0ModelsInvocation> call(
+  Future<Invocation> call(
     String key,
-    IoApibuilderGeneratorV0ModelsInvocationForm form,
+    InvocationForm form,
   ) async {
     final generator = await showGenerator(key);
 
@@ -21,7 +20,7 @@ class CreateAddInvocation {
       return generator.build(form);
     } //
     catch (e) {
-      throw IoApibuilderGeneratorV0ModelsError(
+      throw Error(
         code: 'invocation-error',
         message: e.toString(),
       );

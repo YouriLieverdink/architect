@@ -1,177 +1,172 @@
-import 'dart:convert';
+library io_apibuilder_generator_v0_client;
 
-import 'package:cli/cli.dart';
-import 'package:http/http.dart';
+import 'dart:convert' as _i4;
+import 'dart:core' as _i2;
 
-class IoApibuilderGeneratorV0ModelsGeneratorResource {
-  const IoApibuilderGeneratorV0ModelsGeneratorResource({
+import 'package:http/http.dart' as _i1;
+
+import './io_apibuilder_generator_v0_json.dart' as _i3;
+
+class GeneratorResource {
+  const GeneratorResource({
     required this.client,
     required this.baseUrl,
   });
 
-  final Client client;
+  final _i1.Client client;
 
-  final String baseUrl;
+  final _i2.String baseUrl;
 
-  Future<List<IoApibuilderGeneratorV0ModelsGenerator>> get({
-    String? key,
-    int limit = 100,
-    int offset = 0,
+  _i2.Future<_i2.List<_i3.Generator>> get({
+    _i2.String? key,
+    _i2.int limit = 100,
+    _i2.int offset = 0,
   }) async {
-    final r = await client.get(
-      Uri.parse('$baseUrl/generators').replace(
-        queryParameters: {
-          if (key != null) ...{
-            'key': jsonEncode(key),
-          },
-          'limit': jsonEncode(limit),
-          'offset': jsonEncode(offset)
-        },
-      ),
+    final queryParameters = {'key': key, 'limit': limit, 'offset': offset};
+
+    final uri = _i2.Uri(
+      host: 'https://api.apibuilder.io',
+      path: '/generators',
+      queryParameters: queryParameters,
     );
 
-    final json = jsonDecode(r.body);
+    final response = await client.get(uri);
 
-    switch (r.statusCode) {
+    switch (response.statusCode) {
       case 200:
-        return (json as List)
-            .map((v) => IoApibuilderGeneratorV0ModelsGenerator.fromJson(v))
+        final json = _i4.jsonDecode(response.body);
+
+        return (json as _i2.List)
+            .map((v) => _i3.Generator.fromJson(v))
             .toList();
 
       default:
-        throw Exception([
-          r.statusCode,
-          'Unsupported status code: ${r.statusCode}, expected 200.'
-        ]);
+        throw _i2.Exception();
     }
   }
 
-  Future<IoApibuilderGeneratorV0ModelsGenerator> getByKey({
-    required String key,
-  }) async {
-    final r = await client.get(
-      Uri.parse('$baseUrl/generators/$key'),
+  _i2.Future<_i3.Generator> getByKey({required _i2.String key}) async {
+    final uri = _i2.Uri(
+      host: 'https://api.apibuilder.io',
+      path: '/generators/$key',
     );
 
-    final json = jsonDecode(r.body);
+    final response = await client.get(uri);
 
-    switch (r.statusCode) {
+    switch (response.statusCode) {
       case 200:
-        return IoApibuilderGeneratorV0ModelsGenerator.fromJson(json);
+        final json = _i4.jsonDecode(response.body);
+
+        return _i3.Generator.fromJson(json);
 
       case 404:
-        throw Exception([
-          r.statusCode,
-          null,
-        ]);
+        throw _i2.Exception();
 
       default:
-        throw Exception([
-          r.statusCode,
-          'Unsupported status code: ${r.statusCode}, expected 200, 404.',
-        ]);
+        throw _i2.Exception();
     }
   }
 }
 
-class IoApibuilderGeneratorV0ModelsHealthcheckResource {
-  const IoApibuilderGeneratorV0ModelsHealthcheckResource({
+class HealthcheckResource {
+  const HealthcheckResource({
     required this.client,
     required this.baseUrl,
   });
 
-  final Client client;
+  final _i1.Client client;
 
-  final String baseUrl;
+  final _i2.String baseUrl;
 
-  Future<IoApibuilderGeneratorV0ModelsHealthcheck> get() async {
-    final r = await client.get(
-      Uri.parse('$baseUrl/_internal_/healthcheck'),
+  _i2.Future<_i3.Healthcheck> get() async {
+    final uri = _i2.Uri(
+      host: 'https://api.apibuilder.io',
+      path: '/_internal_/healthcheck',
     );
 
-    final json = jsonDecode(r.body);
+    final response = await client.get(uri);
 
-    switch (r.statusCode) {
+    switch (response.statusCode) {
       case 200:
-        return IoApibuilderGeneratorV0ModelsHealthcheck.fromJson(json);
+        final json = _i4.jsonDecode(response.body);
+
+        return _i3.Healthcheck.fromJson(json);
 
       default:
-        throw Exception([
-          r.statusCode,
-          'Unsupported status code: ${r.statusCode}, expected 200.',
-        ]);
+        throw _i2.Exception();
     }
   }
 }
 
-class IoApibuilderGeneratorV0ModelsInvocationResource {
-  const IoApibuilderGeneratorV0ModelsInvocationResource({
+class InvocationResource {
+  const InvocationResource({
     required this.client,
     required this.baseUrl,
   });
 
-  final Client client;
+  final _i1.Client client;
 
-  final String baseUrl;
+  final _i2.String baseUrl;
 
-  Future<IoApibuilderGeneratorV0ModelsInvocation> postByKey(
-    IoApibuilderGeneratorV0ModelsInvocationForm invocationForm, {
-    required String key,
+  _i2.Future<_i3.Invocation> postByKey(
+    _i3.InvocationForm body, {
+    required _i2.String key,
   }) async {
-    final r = await client.post(
-      Uri.parse('$baseUrl/invocations/$key'),
-      body: jsonEncode(invocationForm),
+    final uri = _i2.Uri(
+      host: 'https://api.apibuilder.io',
+      path: '/invocations/$key',
     );
 
-    final json = jsonDecode(r.body);
+    final response = await client.post(
+      uri,
+      body: body.toJson(),
+    );
 
-    switch (r.statusCode) {
+    switch (response.statusCode) {
       case 200:
-        return IoApibuilderGeneratorV0ModelsInvocation.fromJson(json);
+        final json = _i4.jsonDecode(response.body);
+
+        return _i3.Invocation.fromJson(json);
 
       case 409:
-        throw Exception([
-          r.statusCode,
-          null,
-        ]);
+        final json = _i4.jsonDecode(response.body);
+
+        throw (json as _i2.List).map((v) => _i3.Error.fromJson(v)).toList();
 
       default:
-        throw Exception([
-          r.statusCode,
-          'Unsupported status code: ${r.statusCode}, expected 200, 409.'
-        ]);
+        throw _i2.Exception();
     }
   }
 }
 
-class IoApibuilderGeneratorV0Client {
-  const IoApibuilderGeneratorV0Client({
+class Client {
+  const Client({
     required this.client,
     required this.baseUrl,
   });
 
-  final Client client;
+  final _i1.Client client;
 
-  final String baseUrl;
+  final _i2.String baseUrl;
 
-  IoApibuilderGeneratorV0ModelsGeneratorResource get generators {
-    return IoApibuilderGeneratorV0ModelsGeneratorResource(
-      baseUrl: baseUrl,
+  GeneratorResource get generators {
+    return GeneratorResource(
       client: client,
+      baseUrl: baseUrl,
     );
   }
 
-  IoApibuilderGeneratorV0ModelsHealthcheckResource get healthchecks {
-    return IoApibuilderGeneratorV0ModelsHealthcheckResource(
-      baseUrl: baseUrl,
+  HealthcheckResource get healthchecks {
+    return HealthcheckResource(
       client: client,
+      baseUrl: baseUrl,
     );
   }
 
-  IoApibuilderGeneratorV0ModelsInvocationResource get invocations {
-    return IoApibuilderGeneratorV0ModelsInvocationResource(
-      baseUrl: baseUrl,
+  InvocationResource get invocations {
+    return InvocationResource(
       client: client,
+      baseUrl: baseUrl,
     );
   }
 }

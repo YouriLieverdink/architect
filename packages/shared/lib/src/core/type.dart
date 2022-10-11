@@ -1,12 +1,12 @@
 import 'package:shared/shared.dart';
 
-abstract class Type {
+abstract class TypeConfig {
   //
-  const Type({
+  const TypeConfig({
     this.isNullable = false,
   });
 
-  factory Type.of(
+  factory TypeConfig.of(
     String value, {
     bool isNullable = false,
     String? kind,
@@ -14,82 +14,82 @@ abstract class Type {
     final nested = getNestedTypeName(value);
 
     if (isArrayTypeName(value)) {
-      return ArrayType(
-        Type.of(nested, kind: kind),
+      return ArrayTypeConfig(
+        TypeConfig.of(nested, kind: kind),
         isNullable: isNullable,
       );
     }
 
     if (isMapTypeName(value)) {
-      return MapType(
-        Type.of(nested, kind: kind),
+      return MapTypeConfig(
+        TypeConfig.of(nested, kind: kind),
         isNullable: isNullable,
       );
     }
 
     if (isPrimitiveTypeName(value)) {
-      return PrimitiveType(
+      return PrimitiveTypeConfig(
         getShortTypeName(value),
         isNullable: isNullable,
       );
     }
 
     if (isModelTypeName(value) || kind == 'models') {
-      return ModelType(
+      return ModelTypeConfig(
         getShortTypeName(value),
         isNullable: isNullable,
       );
     }
 
     if (isEnumTypeName(value) || kind == 'enums') {
-      return EnumType(
+      return EnumTypeConfig(
         getShortTypeName(value),
         isNullable: isNullable,
       );
     }
 
     if (isUnionTypeName(value) || kind == 'unions') {
-      return UnionType(
+      return UnionTypeConfig(
         getShortTypeName(value),
         isNullable: isNullable,
       );
     }
 
-    return const UnknownType();
+    return const UnknownTypeConfig();
   }
 
   final bool isNullable;
 }
 
-class UnknownType extends Type {
-  const UnknownType();
+class UnknownTypeConfig extends TypeConfig {
+  const UnknownTypeConfig();
 }
 
-abstract class EnclosingType extends Type {
-  const EnclosingType(
+abstract class EnclosingTypeConfig extends TypeConfig {
+  const EnclosingTypeConfig(
     this.nested, {
     super.isNullable,
   });
 
-  final Type nested;
+  final TypeConfig nested;
 }
 
-class ArrayType extends EnclosingType {
-  const ArrayType(
+class ArrayTypeConfig extends EnclosingTypeConfig {
+  const ArrayTypeConfig(
     super.nested, {
     super.isNullable,
   });
 }
 
-class MapType extends EnclosingType {
-  const MapType(
+class MapTypeConfig extends EnclosingTypeConfig {
+  const MapTypeConfig(
     super.nested, {
     super.isNullable,
   });
 }
 
-abstract class BaseType extends Type {
-  const BaseType(
+abstract class BaseTypeConfig extends TypeConfig {
+  const BaseTypeConfig(
     this.value, {
     super.isNullable,
   });
@@ -97,29 +97,29 @@ abstract class BaseType extends Type {
   final String value;
 }
 
-class PrimitiveType extends BaseType {
-  const PrimitiveType(
+class PrimitiveTypeConfig extends BaseTypeConfig {
+  const PrimitiveTypeConfig(
     super.value, {
     super.isNullable,
   });
 }
 
-class ModelType extends BaseType {
-  const ModelType(
+class ModelTypeConfig extends BaseTypeConfig {
+  const ModelTypeConfig(
     super.value, {
     super.isNullable,
   });
 }
 
-class EnumType extends BaseType {
-  const EnumType(
+class EnumTypeConfig extends BaseTypeConfig {
+  const EnumTypeConfig(
     super.value, {
     super.isNullable,
   });
 }
 
-class UnionType extends BaseType {
-  const UnionType(
+class UnionTypeConfig extends BaseTypeConfig {
+  const UnionTypeConfig(
     super.value, {
     super.isNullable,
   });

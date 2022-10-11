@@ -1,11 +1,11 @@
-import 'package:shared/shared.dart';
+import 'package:server/server.dart';
 
 class CreateShowHealthcheck {
   //
   const CreateShowHealthcheck();
 
-  Future<IoApibuilderGeneratorV0ModelsHealthcheck> call() async {
-    return const IoApibuilderGeneratorV0ModelsHealthcheck(
+  Future<Healthcheck> call() async {
+    return const Healthcheck(
       status: 'healthy',
     );
   }

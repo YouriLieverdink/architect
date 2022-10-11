@@ -10,7 +10,7 @@ class Definition {
 
   final String namespace;
 
-  final Type type;
+  final TypeConfig type;
 
   final bool isLocal;
 }

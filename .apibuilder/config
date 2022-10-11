@@ -3,8 +3,20 @@ settings:
 
 code:
   apicollective:
+    apibuilder-spec:
+      version: latest
+      generators:
+        - generator: dart_2_17_json
+          target: ./packages/shared/lib/src/generated
+
     apibuilder-generator:
       version: latest
       generators:
-        - generator: dart_2_15_json
-          target: ./packages/shared/lib/src/generated/
+        - generator: dart_2_17_json
+          target: ./services/server/lib/src/generated/
+          files:
+            - io_apibuilder_generator_v0_json.dart
+        - generator: dart_2_17_json
+          target: ./services/cli/lib/src/generated/
+        - generator: dart_2_17_client
+          target: ./services/cli/lib/src/generated/
