@@ -1,6 +1,6 @@
-import 'package:shared/shared.dart';
+import 'package:server/server.dart';
 
-class InvokableGenerator extends IoApibuilderGeneratorV0ModelsGenerator {
+class InvokableGenerator extends Generator {
   //
   const InvokableGenerator({
     required super.key,
@@ -11,7 +11,5 @@ class InvokableGenerator extends IoApibuilderGeneratorV0ModelsGenerator {
     required this.build,
   });
 
-  final IoApibuilderGeneratorV0ModelsInvocation Function(
-    IoApibuilderGeneratorV0ModelsInvocationForm form,
-  ) build;
+  final Invocation Function(InvocationForm form) build;
 }

@@ -4,7 +4,7 @@ import 'dart:core' as _i2;
 
 import 'package:equatable/equatable.dart' as _i1;
 
-import './io_apibuilder_spec_v0_json.dart' as _i3;
+import 'package:shared/shared.dart' as _i3;
 
 enum FileFlag { scaffolding }
 

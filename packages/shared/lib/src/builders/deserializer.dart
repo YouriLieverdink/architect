@@ -1,9 +1,9 @@
-import 'package:orchestrator/orchestrator.dart';
+import 'package:orchestrator/orchestrator.dart' as i1;
 import 'package:shared/shared.dart';
 
 extension BuildDeserializer on Definition {
   //
-  Builder deserializer(
+  i1.Builder deserializer(
     String name,
   ) {
     return buildDeserializer(
@@ -15,17 +15,17 @@ extension BuildDeserializer on Definition {
   }
 }
 
-Builder buildDeserializer(
+i1.Builder buildDeserializer(
   String name,
   String namespace,
-  Type type, {
+  TypeConfig type, {
   bool isLocal = false,
 }) {
-  if (type is ArrayType) {
-    final closure = Method(
+  if (type is ArrayTypeConfig) {
+    final closure = i1.Method(
       lambda: true,
       parameters: const [
-        Parameter(name: 'v'),
+        i1.Parameter(name: 'v'),
       ],
       body: buildDeserializer(
         'v',
@@ -35,25 +35,25 @@ Builder buildDeserializer(
       ),
     );
 
-    return Static(name) //
+    return i1.Static(name) //
         .property('map', isNullSafe: type.isNullable)
         .invoke([closure])
         .property('toList')
         .invoke();
   }
 
-  if (type is MapType) {
-    final closure = Method(
+  if (type is MapTypeConfig) {
+    final closure = i1.Method(
       lambda: true,
       parameters: const [
-        Parameter(name: 'k'),
-        Parameter(name: 'v'),
+        i1.Parameter(name: 'k'),
+        i1.Parameter(name: 'v'),
       ],
       // body: nested.deserializer('v'),
-      body: invoke(
-        const TypeReference('MapEntry', url: 'dart:core'),
+      body: i1.invoke(
+        const i1.TypeReference('MapEntry', url: 'dart:core'),
         [
-          const Static('k'),
+          const i1.Static('k'),
           buildDeserializer(
             'v',
             namespace,
@@ -64,40 +64,40 @@ Builder buildDeserializer(
       ),
     );
 
-    return Static(name) //
+    return i1.Static(name) //
         .property('map', isNullSafe: type.isNullable)
         .invoke([closure]);
   }
 
-  if (type is PrimitiveType) {
+  if (type is PrimitiveTypeConfig) {
     switch (type.value) {
       case 'date-iso8601':
       case 'date-time-iso8601':
-        return Static(name) //
+        return i1.Static(name) //
             .property('toIso8601String', isNullSafe: type.isNullable)
             .invoke();
 
       default:
-        return Static(name);
+        return i1.Static(name);
     }
   }
 
-  if (type is ModelType) {
-    return Static(name) //
+  if (type is ModelTypeConfig) {
+    return i1.Static(name) //
         .property('toJson', isNullSafe: type.isNullable)
         .invoke();
   }
 
-  if (type is EnumType) {
-    return Static(name) //
+  if (type is EnumTypeConfig) {
+    return i1.Static(name) //
         .property('name', isNullSafe: type.isNullable);
   }
 
   if (type is UnionType) {
-    return Static(name) //
+    return i1.Static(name) //
         .property('toJson', isNullSafe: type.isNullable)
         .invoke();
   }
 
-  return Static(name);
+  return i1.Static(name);
 }

@@ -15,10 +15,10 @@ extension BuildReference on Definition {
 
 TypeReference buildReference(
   String namespace,
-  Type type, {
+  TypeConfig type, {
   bool isLocal = false,
 }) {
-  if (type is ArrayType) {
+  if (type is ArrayTypeConfig) {
     return TypeReference(
       'List',
       url: 'dart:core',
@@ -29,7 +29,7 @@ TypeReference buildReference(
     );
   }
 
-  if (type is MapType) {
+  if (type is MapTypeConfig) {
     return TypeReference(
       'Map',
       url: 'dart:core',
@@ -41,7 +41,7 @@ TypeReference buildReference(
     );
   }
 
-  if (type is PrimitiveType) {
+  if (type is PrimitiveTypeConfig) {
     TypeReference base(String value) {
       return TypeReference(
         value,
@@ -78,7 +78,7 @@ TypeReference buildReference(
     }
   }
 
-  if (type is BaseType) {
+  if (type is BaseTypeConfig) {
     final short = getShortTypeName(type.value);
 
     return TypeReference(

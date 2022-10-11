@@ -1,5 +1,4 @@
 import 'package:server/server.dart';
-import 'package:shared/shared.dart';
 
 class CreateShowGenerator {
   //
@@ -18,7 +17,7 @@ class CreateShowGenerator {
           .first;
     } //
     catch (_) {
-      throw IoApibuilderGeneratorV0ModelsError(
+      throw Error(
         code: 'not-found',
         message: 'The generator with key $key was not found.',
       );

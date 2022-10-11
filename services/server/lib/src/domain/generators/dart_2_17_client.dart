@@ -1,23 +1,24 @@
-import 'package:orchestrator/orchestrator.dart';
+import 'package:orchestrator/orchestrator.dart' as i1;
 import 'package:recase/recase.dart';
+import 'package:server/server.dart';
 import 'package:shared/shared.dart';
 
-IoApibuilderGeneratorV0ModelsInvocation buildDart217Client(
-  IoApibuilderGeneratorV0ModelsInvocationForm form,
+Invocation buildDart217Client(
+  InvocationForm form,
 ) {
   final services = [form.service, ...?form.importedServices];
 
   final file = _buildFile(form.service.namespace, services);
 
-  return IoApibuilderGeneratorV0ModelsInvocation(
+  return Invocation(
     files: [file],
     source: '',
   );
 }
 
-IoApibuilderGeneratorV0ModelsFile _buildFile(
+File _buildFile(
   String namespace,
-  List<IoApibuilderSpecV0ModelsService> services,
+  List<Service> services,
 ) {
   final context = BuildContext(
     namespace: namespace,
@@ -27,18 +28,18 @@ IoApibuilderGeneratorV0ModelsFile _buildFile(
 
   final library = _buildLibrary(context);
 
-  return IoApibuilderGeneratorV0ModelsFile(
+  return File(
     name: '${context.namespace.snakeCase}_client.dart',
     contents: emit(library),
   );
 }
 
-Library _buildLibrary(
+i1.Library _buildLibrary(
   BuildContext context,
 ) {
   final name = '${context.namespace.snakeCase}_client';
 
-  return Library(
+  return i1.Library(
     name: name,
     elements: () sync* {
       //
@@ -51,30 +52,30 @@ Library _buildLibrary(
   );
 }
 
-Class _buildResource(
+i1.Class _buildResource(
   BuildContext context,
-  IoApibuilderSpecV0ModelsResource resource,
+  Resource resource,
 ) {
   final resourceDef = context.find(resource.type);
 
-  return Class(
+  return i1.Class(
     name: '${resourceDef.reference.symbol}Resource',
     constructors: () sync* {
       //
-      yield Constructor(
+      yield i1.Constructor(
         isConst: true,
         parameters: () sync* {
           //
-          yield const Parameter(
+          yield const i1.Parameter(
             name: 'client',
-            kind: ParameterKind.named,
+            kind: i1.ParameterKind.named,
             isToThis: true,
             isRequired: true,
           );
 
-          yield const Parameter(
+          yield const i1.Parameter(
             name: 'baseUrl',
-            kind: ParameterKind.named,
+            kind: i1.ParameterKind.named,
             isToThis: true,
             isRequired: true,
           );
@@ -83,22 +84,22 @@ Class _buildResource(
     }(),
     fields: () sync* {
       //
-      yield const Field(
+      yield const i1.Field(
         name: 'client',
-        type: TypeReference(
+        type: i1.TypeReference(
           'Client',
           url: 'package:http/http.dart',
         ),
-        modifier: FieldModifier.final_,
+        modifier: i1.FieldModifier.final_,
       );
 
-      yield const Field(
+      yield const i1.Field(
         name: 'baseUrl',
-        type: TypeReference(
+        type: i1.TypeReference(
           'String',
           url: 'dart:core',
         ),
-        modifier: FieldModifier.final_,
+        modifier: i1.FieldModifier.final_,
       );
     }(),
     methods: () sync* {
@@ -110,9 +111,9 @@ Class _buildResource(
   );
 }
 
-Method _buildOperation(
+i1.Method _buildOperation(
   BuildContext context,
-  IoApibuilderSpecV0ModelsOperation operation,
+  Operation operation,
 ) {
   final name = () {
     //
@@ -126,16 +127,16 @@ Method _buildOperation(
     return method;
   }();
 
-  return Method(
+  return i1.Method(
     name: name,
-    modifier: MethodMofifier.async,
+    modifier: i1.MethodMofifier.async,
     returns: () {
       //
       final responseDef = context.find(
         operation.responses.first.type,
       );
 
-      return TypeReference(
+      return i1.TypeReference(
         'Future',
         url: 'dart:core',
         types: [
@@ -148,7 +149,7 @@ Method _buildOperation(
       if (operation.body != null) {
         final bodyDef = context.find(operation.body!.type);
 
-        yield Parameter(
+        yield i1.Parameter(
           name: 'body',
           type: bodyDef.reference,
         );
@@ -161,21 +162,21 @@ Method _buildOperation(
           isNullable: !v.required,
         );
 
-        yield Parameter(
+        yield i1.Parameter(
           name: name,
           type: parameterDef.reference,
-          kind: ParameterKind.named,
+          kind: i1.ParameterKind.named,
           isRequired: v.required && v.default_ == null,
           assign: () {
             //
             if (v.default_ != null) {
-              return Static(v.default_!);
+              return i1.Static(v.default_!);
             }
           }(),
         );
       }
     }(),
-    body: Column(
+    body: i1.Column(
       () sync* {
         //
         final query = operation.parameters //
@@ -183,75 +184,81 @@ Method _buildOperation(
             .toList();
 
         if (query.isNotEmpty) {
-          final Map<Builder, Builder> arguments = {};
+          final Map<i1.Builder, i1.Builder> arguments = {};
 
           for (final v in query) {
             final name = getName(v.name);
-            final parameterDef = context.find(v.type);
+            final parameterDef = context.find(
+              v.type,
+              isNullable: !v.required,
+            );
 
             arguments.addAll({
-              LiteralString(name): parameterDef.deserializer(name),
+              i1.LiteralString(name): parameterDef //
+                  .deserializer(name)
+                  .property('toString', isNullSafe: !v.required)
+                  .invoke(),
             });
           }
 
-          yield const Static('queryParameters') //
+          yield const i1.Static('query') //
               .declareFinal
-              .assign(Literal.of(arguments))
+              .assign(i1.Literal.of(arguments))
               .statement;
         }
 
-        yield const Static('');
+        yield const i1.Static('');
 
-        final uri = invoke(
-          const TypeReference('Uri', url: 'dart:core'),
-          () sync* {
-            //
-            yield Literal.of(context.service.baseUrl ?? '').named('host');
+        final path = operation //
+            .path
+            .replaceAll(':', r'$');
 
-            final path = operation //
-                .path
-                .replaceAll(':', r'$');
+        var uri = const i1.TypeReference('Uri', url: 'dart:core') //
+            .property('parse')
+            .invoke([const i1.Static('baseUrl')]);
 
-            yield Literal.of(path).named('path');
+        uri = uri //
+            .property('replace')
+            .invoke([i1.Literal.of(path).named('path')]);
 
-            if (query.isNotEmpty) {
-              yield const Static('queryParameters').named('queryParameters');
-            }
-          }(),
-        );
+        if (query.isNotEmpty) {
+          uri = uri //
+              .property('replace')
+              .invoke([const i1.Static('query').named('queryParameters')]);
+        }
 
-        yield const Static('uri') //
+        yield const i1.Static('uri') //
             .declareFinal
             .assign(uri)
             .statement;
 
-        yield const Static('');
+        yield const i1.Static('');
 
         final arguments = () sync* {
           //
-          yield const Static('uri');
+          yield const i1.Static('uri');
 
           if (operation.body != null) {
-            final bodyDef = context.find(operation.body!.type);
-
-            yield bodyDef.deserializer('body').named('body');
+            yield const i1.TypeReference('jsonEncode', url: 'dart:convert')
+                .invoke([const i1.Static('body')]) //
+                .named('body');
           }
         }();
 
-        final request = const Static('client') //
+        final request = const i1.Static('client') //
             .property(operation.method.name.camelCase)
             .invoke(arguments) //
             .awaited;
 
-        yield const Static('response') //
+        yield const i1.Static('response') //
             .declareFinal
             .assign(request)
             .statement;
 
-        yield const Static('');
+        yield const i1.Static('');
 
-        yield Switch(
-          condition: const Static('response').property('statusCode'),
+        yield i1.Switch(
+          condition: const i1.Static('response').property('statusCode'),
           cases: () sync* {
             //
             for (final v in operation.responses) {
@@ -259,28 +266,28 @@ Method _buildOperation(
 
               final code = v.code.join((v) => v, (v) => 0);
 
-              yield SwitchCase(
-                condition: Literal.of(code),
-                body: Column(
+              yield i1.SwitchCase(
+                condition: i1.Literal.of(code),
+                body: i1.Column(
                   () sync* {
                     //
                     if (v.type != 'unit') {
-                      final decode = invoke(
-                        const TypeReference(
+                      final decode = i1.invoke(
+                        const i1.TypeReference(
                           'jsonDecode',
                           url: 'dart:convert',
                         ),
                         [
-                          const Static('response').property('body'),
+                          const i1.Static('response').property('body'),
                         ],
                       );
 
-                      yield const Static('json') //
+                      yield const i1.Static('json') //
                           .declareFinal
                           .assign(decode)
                           .statement;
 
-                      yield const Static('');
+                      yield const i1.Static('');
 
                       if (code >= 200 && code < 300) {
                         yield responseDef //
@@ -297,16 +304,19 @@ Method _buildOperation(
                     } //
                     else {
                       if (code >= 200 && code < 300) {
-                        yield const Static('break').statement;
+                        yield const i1.Static('break').statement;
                       } //
                       else {
-                        yield invoke(
-                          const TypeReference(
-                            'Exception',
-                            url: 'dart:core',
-                          ),
-                          [],
-                        ).thrown.statement;
+                        yield i1
+                            .invoke(
+                              const i1.TypeReference(
+                                'Exception',
+                                url: 'dart:core',
+                              ),
+                              [],
+                            )
+                            .thrown
+                            .statement;
                       }
                     }
                   }(),
@@ -316,13 +326,16 @@ Method _buildOperation(
           }(),
           default_: () {
             //
-            return invoke(
-              const TypeReference(
-                'Exception',
-                url: 'dart:core',
-              ),
-              [],
-            ).thrown.statement;
+            return i1
+                .invoke(
+                  const i1.TypeReference(
+                    'Exception',
+                    url: 'dart:core',
+                  ),
+                  [],
+                )
+                .thrown
+                .statement;
           }(),
         );
       }(),
@@ -330,27 +343,27 @@ Method _buildOperation(
   );
 }
 
-Class _buildClient(
+i1.Class _buildClient(
   BuildContext context,
 ) {
-  return Class(
+  return i1.Class(
     name: 'Client',
     constructors: () sync* {
       //
-      yield Constructor(
+      yield i1.Constructor(
         isConst: true,
         parameters: () sync* {
           //
-          yield const Parameter(
+          yield const i1.Parameter(
             name: 'client',
-            kind: ParameterKind.named,
+            kind: i1.ParameterKind.named,
             isToThis: true,
             isRequired: true,
           );
 
-          yield const Parameter(
+          yield const i1.Parameter(
             name: 'baseUrl',
-            kind: ParameterKind.named,
+            kind: i1.ParameterKind.named,
             isToThis: true,
             isRequired: true,
           );
@@ -359,22 +372,22 @@ Class _buildClient(
     }(),
     fields: () sync* {
       //
-      yield const Field(
+      yield const i1.Field(
         name: 'client',
-        type: TypeReference(
+        type: i1.TypeReference(
           'Client',
           url: 'package:http/http.dart',
         ),
-        modifier: FieldModifier.final_,
+        modifier: i1.FieldModifier.final_,
       );
 
-      yield const Field(
+      yield const i1.Field(
         name: 'baseUrl',
-        type: TypeReference(
+        type: i1.TypeReference(
           'String',
           url: 'dart:core',
         ),
-        modifier: FieldModifier.final_,
+        modifier: i1.FieldModifier.final_,
       );
     }(),
     methods: () sync* {
@@ -382,19 +395,19 @@ Class _buildClient(
       for (final v in context.service.resources) {
         final resourceDef = context.find(v.type);
 
-        yield Method(
+        yield i1.Method(
           name: v.plural.camelCase,
-          kind: MethodKind.get,
-          returns: TypeReference(
+          kind: i1.MethodKind.get,
+          returns: i1.TypeReference(
             '${resourceDef.reference.symbol}Resource',
           ),
           body: () {
             //
-            final resource = invoke(
-              Static('${resourceDef.reference.symbol}Resource'),
+            final resource = i1.invoke(
+              i1.Static('${resourceDef.reference.symbol}Resource'),
               [
-                const Static('client').named('client'),
-                const Static('baseUrl').named('baseUrl'),
+                const i1.Static('client').named('client'),
+                const i1.Static('baseUrl').named('baseUrl'),
               ],
             );
 

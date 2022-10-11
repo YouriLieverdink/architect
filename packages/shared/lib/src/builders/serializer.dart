@@ -1,9 +1,9 @@
-import 'package:orchestrator/orchestrator.dart';
+import 'package:orchestrator/orchestrator.dart' as i1;
 import 'package:shared/shared.dart';
 
 extension BuildSerializer on Definition {
   //
-  Builder serializer(
+  i1.Builder serializer(
     String name,
   ) {
     return buildSerializer(
@@ -15,10 +15,10 @@ extension BuildSerializer on Definition {
   }
 }
 
-Builder buildSerializer(
+i1.Builder buildSerializer(
   String name,
   String namespace,
-  Type type, {
+  TypeConfig type, {
   bool isLocal = false,
 }) {
   final reference = buildReference(
@@ -27,11 +27,11 @@ Builder buildSerializer(
     isLocal: isLocal,
   );
 
-  if (type is ArrayType) {
-    final closure = Method(
+  if (type is ArrayTypeConfig) {
+    final closure = i1.Method(
       lambda: true,
       parameters: const [
-        Parameter(name: 'v'),
+        i1.Parameter(name: 'v'),
       ],
       body: buildSerializer(
         'v',
@@ -41,9 +41,9 @@ Builder buildSerializer(
       ),
     );
 
-    return Static(name)
+    return i1.Static(name)
         .as(
-          TypeReference(
+          i1.TypeReference(
             'List',
             url: 'dart:core',
             isNullable: type.isNullable,
@@ -55,17 +55,17 @@ Builder buildSerializer(
         .invoke();
   }
 
-  if (type is MapType) {
-    final closure = Method(
+  if (type is MapTypeConfig) {
+    final closure = i1.Method(
       lambda: true,
       parameters: const [
-        Parameter(name: 'k'),
-        Parameter(name: 'v'),
+        i1.Parameter(name: 'k'),
+        i1.Parameter(name: 'v'),
       ],
-      body: invoke(
-        const TypeReference('MapEntry', url: 'dart:core'),
+      body: i1.invoke(
+        const i1.TypeReference('MapEntry', url: 'dart:core'),
         [
-          const Static('k'),
+          const i1.Static('k'),
           buildSerializer(
             'v',
             namespace,
@@ -76,9 +76,9 @@ Builder buildSerializer(
       ),
     );
 
-    return Static(name) //
+    return i1.Static(name) //
         .as(
-          TypeReference(
+          i1.TypeReference(
             'Map',
             url: 'dart:core',
             isNullable: type.isNullable,
@@ -88,8 +88,8 @@ Builder buildSerializer(
         .invoke([closure]);
   }
 
-  if (type is PrimitiveType) {
-    final string = TypeReference(
+  if (type is PrimitiveTypeConfig) {
+    final string = i1.TypeReference(
       'String',
       url: 'dart:core',
       isNullable: type.isNullable,
@@ -98,41 +98,41 @@ Builder buildSerializer(
     switch (type.value) {
       case 'date-iso8601':
       case 'date-time-iso8601':
-        return const TypeReference('DateTime', url: 'dart:core')
+        return const i1.TypeReference('DateTime', url: 'dart:core')
             .property(type.isNullable ? 'tryParse' : 'parse')
-            .invoke([Static(name).as(string)]);
+            .invoke([i1.Static(name).as(string)]);
 
       default:
-        return Static(name).as(reference);
+        return i1.Static(name).as(reference);
     }
   }
 
-  if (type is ModelType) {
+  if (type is ModelTypeConfig) {
     final closure = reference //
         .property('fromJson')
-        .invoke([Static(name)]);
+        .invoke([i1.Static(name)]);
 
     if (type.isNullable) {
-      return Static(name) //
-          .equalTo(const LiteralNull())
-          .conditional(const LiteralNull(), closure);
+      return i1.Static(name) //
+          .equalTo(const i1.LiteralNull())
+          .conditional(const i1.LiteralNull(), closure);
     }
 
     return closure;
   }
 
-  if (type is EnumType) {
-    const string = TypeReference('String', url: 'dart:core');
+  if (type is EnumTypeConfig) {
+    const string = i1.TypeReference('String', url: 'dart:core');
 
     final closure = reference //
         .property('values')
         .property('byName')
-        .invoke([Static(name).as(string)]);
+        .invoke([i1.Static(name).as(string)]);
 
     if (type.isNullable) {
-      return Static(name) //
-          .equalTo(const LiteralNull())
-          .conditional(const LiteralNull(), closure);
+      return i1.Static(name) //
+          .equalTo(const i1.LiteralNull())
+          .conditional(const i1.LiteralNull(), closure);
     }
 
     return closure;
@@ -141,16 +141,16 @@ Builder buildSerializer(
   if (type is UnionType) {
     final closure = reference //
         .property('fromJson')
-        .invoke([Static(name)]);
+        .invoke([i1.Static(name)]);
 
     if (type.isNullable) {
-      return Static(name) //
-          .equalTo(const LiteralNull())
-          .conditional(const LiteralNull(), closure);
+      return i1.Static(name) //
+          .equalTo(const i1.LiteralNull())
+          .conditional(const i1.LiteralNull(), closure);
     }
 
     return closure;
   }
 
-  return Static(name);
+  return i1.Static(name);
 }

@@ -10,11 +10,11 @@ class BuildContext {
 
   final String namespace;
 
-  final List<IoApibuilderSpecV0ModelsService> services;
+  final List<Service> services;
 
   final bool isLocal;
 
-  IoApibuilderSpecV0ModelsService get service {
+  Service get service {
     return services //
         .where((service) => service.namespace == namespace)
         .first;
@@ -50,7 +50,7 @@ class BuildContext {
         final base = getBaseTypeName(value);
 
         if (_types(kind).contains(base)) {
-          final type = Type.of(value, kind: kind, isNullable: isNullable);
+          final type = TypeConfig.of(value, kind: kind, isNullable: isNullable);
 
           return Definition(
             this.namespace,
@@ -62,14 +62,14 @@ class BuildContext {
 
       return Definition(
         this.namespace,
-        Type.of(value, isNullable: isNullable),
+        TypeConfig.of(value, isNullable: isNullable),
         isLocal: isLocal,
       );
     }
 
     return Definition(
       namespace,
-      Type.of(value, isNullable: isNullable),
+      TypeConfig.of(value, isNullable: isNullable),
     );
   }
 }

@@ -1,5 +1,6 @@
-import 'package:orchestrator/orchestrator.dart';
+import 'package:orchestrator/orchestrator.dart' as i1;
 import 'package:recase/recase.dart';
+import 'package:server/server.dart';
 import 'package:shared/shared.dart';
 
 const unions = [
@@ -12,8 +13,8 @@ const factories = [
   'ninth' //
 ];
 
-IoApibuilderGeneratorV0ModelsInvocation buildDart217Json(
-  IoApibuilderGeneratorV0ModelsInvocationForm form,
+Invocation buildDart217Json(
+  InvocationForm form,
 ) {
   final services = [form.service, ...?form.importedServices];
 
@@ -21,15 +22,15 @@ IoApibuilderGeneratorV0ModelsInvocation buildDart217Json(
       .map((v) => buildFile(v.namespace, services))
       .toList();
 
-  return IoApibuilderGeneratorV0ModelsInvocation(
+  return Invocation(
     files: files,
     source: '',
   );
 }
 
-IoApibuilderGeneratorV0ModelsFile buildFile(
+File buildFile(
   String namespace,
-  List<IoApibuilderSpecV0ModelsService> services,
+  List<Service> services,
 ) {
   final context = BuildContext(
     namespace: namespace,
@@ -38,18 +39,18 @@ IoApibuilderGeneratorV0ModelsFile buildFile(
 
   final library = buildLibrary(context);
 
-  return IoApibuilderGeneratorV0ModelsFile(
+  return File(
     name: '${context.namespace.snakeCase}_json.dart',
     contents: emit(library),
   );
 }
 
-Library buildLibrary(
+i1.Library buildLibrary(
   BuildContext context,
 ) {
   final name = '${context.namespace.snakeCase}_json';
 
-  return Library(
+  return i1.Library(
     name: name,
     elements: () sync* {
       //
@@ -68,36 +69,34 @@ Library buildLibrary(
   );
 }
 
-Enum buildEnum(
+i1.Enum buildEnum(
   BuildContext context,
-  IoApibuilderSpecV0ModelsEnum enum_,
+  Enum enum_,
 ) {
   final enumDef = context.find(enum_.name);
 
-  return Enum(
+  return i1.Enum(
     name: enumDef.reference.symbol,
     values: () sync* {
       //
       for (final v in enum_.values) {
-        final name = getName(v.name);
-
-        yield EnumValue(
-          name,
+        yield i1.EnumValue(
+          v.name,
         );
       }
     }(),
   );
 }
 
-Class buildModel(
+i1.Class buildModel(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
   final modelDef = context.find(model.name);
 
-  return Class(
+  return i1.Class(
     name: modelDef.reference.symbol,
-    extends_: const TypeReference(
+    extends_: const i1.TypeReference(
       'Equatable',
       url: 'package:equatable/equatable.dart',
     ),
@@ -114,9 +113,9 @@ Class buildModel(
           isNullable: !v.required,
         );
 
-        yield Field(
+        yield i1.Field(
           name: name,
-          modifier: FieldModifier.final_,
+          modifier: i1.FieldModifier.final_,
           type: fieldDef.reference,
         );
       }
@@ -129,20 +128,20 @@ Class buildModel(
   );
 }
 
-Constructor buildModelConstructor(
+i1.Constructor buildModelConstructor(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
-  return Constructor(
+  return i1.Constructor(
     isConst: true,
     parameters: () sync* {
       //
       for (final v in model.fields) {
         final name = getName(v.name);
 
-        yield Parameter(
+        yield i1.Parameter(
           name: name,
-          kind: ParameterKind.named,
+          kind: i1.ParameterKind.named,
           isToThis: true,
           isRequired: v.required,
         );
@@ -151,19 +150,19 @@ Constructor buildModelConstructor(
   );
 }
 
-Constructor buildModelFromJson(
+i1.Constructor buildModelFromJson(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
   final modelDef = context.find(model.name);
 
-  return Constructor(
+  return i1.Constructor(
     isFactory: true,
     name: 'fromJson',
     parameters: const [
-      Parameter(
+      i1.Parameter(
         name: 'json',
-        type: TypeReference(
+        type: i1.TypeReference(
           'dynamic',
           url: 'dart:core',
         ),
@@ -171,7 +170,7 @@ Constructor buildModelFromJson(
     ],
     body: () {
       //
-      final List<Builder> arguments = [];
+      final List<i1.Builder> arguments = [];
 
       for (final v in model.fields) {
         final name = getName(v.name);
@@ -196,19 +195,19 @@ Constructor buildModelFromJson(
   );
 }
 
-Method buildModelToJson(
+i1.Method buildModelToJson(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
-  return Method(
+  return i1.Method(
     name: 'toJson',
-    returns: const TypeReference(
+    returns: const i1.TypeReference(
       'dynamic',
       url: 'dart:core',
     ),
     body: () {
       //
-      final Map<Builder, Builder> arguments = {};
+      final Map<i1.Builder, i1.Builder> arguments = {};
 
       for (final v in model.fields) {
         final name = getName(v.name);
@@ -218,24 +217,24 @@ Method buildModelToJson(
         );
 
         arguments.addAll({
-          LiteralString(v.name): fieldDef.deserializer(name),
+          i1.LiteralString(v.name): fieldDef.deserializer(name),
         });
       }
 
-      return LiteralMap(arguments) //
+      return i1.LiteralMap(arguments) //
           .returned
           .statement;
     }(),
   );
 }
 
-Method buildCopyWith(
+i1.Method buildCopyWith(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
   final modelDef = context.find(model.name);
 
-  return Method(
+  return i1.Method(
     name: 'copyWith',
     returns: modelDef.reference,
     parameters: () sync* {
@@ -247,23 +246,23 @@ Method buildCopyWith(
           isNullable: true,
         );
 
-        yield Parameter(
+        yield i1.Parameter(
           name: name,
           type: fieldDef.reference,
-          kind: ParameterKind.named,
+          kind: i1.ParameterKind.named,
         );
       }
     }(),
     body: () {
       //
-      final List<Builder> arguments = [];
+      final List<i1.Builder> arguments = [];
 
       for (final v in model.fields) {
         final name = getName(v.name);
 
         arguments.add(
-          Static(name) //
-              .ifNullThen(const Static('this').property(name))
+          i1.Static(name) //
+              .ifNullThen(const i1.Static('this').property(name))
               .named(name),
         );
       }
@@ -277,26 +276,26 @@ Method buildCopyWith(
   );
 }
 
-Method buildModelProps(
+i1.Method buildModelProps(
   BuildContext context,
-  IoApibuilderSpecV0ModelsModel model,
+  Model model,
 ) {
-  return Method(
+  return i1.Method(
     annotations: const [
-      Annotation(
-        type: TypeReference(
+      i1.Annotation(
+        type: i1.TypeReference(
           'override',
           url: 'dart:core',
         ),
       ),
     ],
     name: 'props',
-    kind: MethodKind.get,
-    returns: const TypeReference(
+    kind: i1.MethodKind.get,
+    returns: const i1.TypeReference(
       'List',
       url: 'dart:core',
       types: [
-        TypeReference(
+        i1.TypeReference(
           'Object',
           url: 'dart:core',
           isNullable: true,
@@ -305,35 +304,35 @@ Method buildModelProps(
     ),
     body: () {
       //
-      final List<Builder> arguments = [];
+      final List<i1.Builder> arguments = [];
 
       for (final v in model.fields) {
         final name = getName(v.name);
 
         arguments.add(
-          Static(name),
+          i1.Static(name),
         );
       }
 
-      return LiteralList(arguments) //
+      return i1.LiteralList(arguments) //
           .returned
           .statement;
     }(),
   );
 }
 
-Class buildUnion(
+i1.Class buildUnion(
   BuildContext context,
-  IoApibuilderSpecV0ModelsUnion union,
+  Union union,
 ) {
   final unionDef = context.find(union.name);
 
   // We need the number of types to create the correct reference.
   final n = union.types.length;
 
-  return Class(
+  return i1.Class(
     name: unionDef.reference.symbol,
-    extends_: TypeReference(
+    extends_: i1.TypeReference(
       'Union${n}Impl',
       url: 'package:sealed_unions/sealed_unions.dart',
       types: () sync* {
@@ -347,10 +346,10 @@ Class buildUnion(
       }(),
     ),
     constructors: [
-      const Constructor(
+      const i1.Constructor(
         name: '_',
         parameters: [
-          Parameter(
+          i1.Parameter(
             name: 'union',
             isToSuper: true,
           ),
@@ -359,14 +358,14 @@ Class buildUnion(
       buildUnionFromJson(context, union),
     ],
     fields: [
-      Field(
+      i1.Field(
         name: 'factory',
         isStatic: true,
-        modifier: FieldModifier.const_,
-        type: const TypeReference(''),
+        modifier: i1.FieldModifier.const_,
+        type: const i1.TypeReference(''),
         assign: () {
           //
-          final reference = TypeReference(
+          final reference = i1.TypeReference(
             unions[n],
             url: 'package:sealed_unions/sealed_unions.dart',
             types: () sync* {
@@ -389,43 +388,43 @@ Class buildUnion(
   );
 }
 
-Constructor buildUnionFromJson(
+i1.Constructor buildUnionFromJson(
   BuildContext context,
-  IoApibuilderSpecV0ModelsUnion union,
+  Union union,
 ) {
   final unionDef = context.find(union.name);
 
-  return Constructor(
+  return i1.Constructor(
     isFactory: true,
     name: 'fromJson',
     parameters: const [
-      Parameter(
+      i1.Parameter(
         name: 'json',
-        type: TypeReference(
+        type: i1.TypeReference(
           'dynamic',
           url: 'dart:core',
         ),
       ),
     ],
-    body: Column(
+    body: i1.Column(
       () sync* {
         //
         if (union.discriminator != null) {
-          yield const Static('type') //
+          yield const i1.Static('type') //
               .declareFinal
               .assign(
-                const Static('json') //
-                    .index(LiteralString(union.discriminator!)),
+                const i1.Static('json') //
+                    .index(i1.LiteralString(union.discriminator!)),
               )
               .statement;
         } //
         else {
-          yield const Static('type') //
+          yield const i1.Static('type') //
               .declareFinal
               .assign(
-                const Static('json')
+                const i1.Static('json')
                     .as(
-                      const TypeReference(
+                      const i1.TypeReference(
                         'Map',
                         url: 'dart:core',
                       ),
@@ -436,10 +435,10 @@ Constructor buildUnionFromJson(
               .statement;
         }
 
-        yield const Static('');
+        yield const i1.Static('');
 
-        yield Switch(
-          condition: const Static('type'),
+        yield i1.Switch(
+          condition: const i1.Static('type'),
           cases: () sync* {
             //
             var index = 0;
@@ -448,17 +447,17 @@ Constructor buildUnionFromJson(
               final typeDef = context.find(v.type);
               final discriminator = v.discriminatorValue ?? v.type;
 
-              yield SwitchCase(
-                condition: LiteralString(discriminator),
+              yield i1.SwitchCase(
+                condition: i1.LiteralString(discriminator),
                 body: () {
                   //
                   final selector = "json['$discriminator']";
 
-                  final a = typeDef.type is ModelType //
+                  final a = typeDef.type is ModelTypeConfig //
                       ? typeDef.serializer(selector)
                       : typeDef.serializer("$selector['value']");
 
-                  final b = const Static('factory') //
+                  final b = const i1.Static('factory') //
                       .property(factories[index])
                       .invoke([a]);
 
@@ -476,7 +475,7 @@ Constructor buildUnionFromJson(
           }(),
           default_: () {
             //
-            return const TypeReference(
+            return const i1.TypeReference(
               'Exception',
               url: 'dart:core',
             ) //
@@ -490,39 +489,39 @@ Constructor buildUnionFromJson(
   );
 }
 
-Method buildUnionToJson(
+i1.Method buildUnionToJson(
   BuildContext context,
-  IoApibuilderSpecV0ModelsUnion union,
+  Union union,
 ) {
-  return Method(
+  return i1.Method(
     name: 'toJson',
-    returns: const TypeReference(
+    returns: const i1.TypeReference(
       'dynamic',
       url: 'dart:core',
     ),
     body: () {
       //
-      final List<Builder> arguments = [];
+      final List<i1.Builder> arguments = [];
 
       for (final v in union.types) {
         final typeDef = context.find(v.type);
         final discriminator = v.discriminatorValue ?? v.type;
 
         arguments.add(
-          Method(
+          i1.Method(
             parameters: const [
-              Parameter(name: 'v'),
+              i1.Parameter(name: 'v'),
             ],
             body: () {
               //
-              final a = typeDef.type is ModelType //
+              final a = typeDef.type is ModelTypeConfig //
                   ? typeDef.deserializer('v')
-                  : LiteralMap({
-                      const LiteralString('value'): typeDef.deserializer('v'),
+                  : i1.LiteralMap({
+                      i1.Literal.of('value'): typeDef.deserializer('v'),
                     });
 
-              final b = LiteralMap({
-                Literal.of(discriminator): a,
+              final b = i1.Literal.of({
+                i1.Literal.of(discriminator): a,
               });
 
               return b //
@@ -533,7 +532,7 @@ Method buildUnionToJson(
         );
       }
 
-      return const Static('join') //
+      return const i1.Static('join') //
           .invoke(arguments)
           .returned
           .statement;
