@@ -1,5 +1,4 @@
 import 'package:shared/shared.dart';
-import 'package:shared/src/generated/io_apibuilder_spec_v0_json.dart';
 
 class BuildContext {
   //
