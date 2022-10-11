@@ -6,6 +6,7 @@ Handler handler() {
   final handler = RouterPlus();
 
   handler.use(setContentType('application/json'));
+  handler.use(logRequests());
 
   return handler //
     ..get('/_internal_/healthcheck', HealthcheckController.get)
