@@ -51,6 +51,7 @@ i1.Library buildLibrary(
   final name = '${context.namespace.snakeCase}_json';
 
   return i1.Library(
+    docs: buildHeader('dart_2_17_json'),
     name: name,
     elements: () sync* {
       //
