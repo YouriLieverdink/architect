@@ -40,6 +40,7 @@ i1.Library _buildLibrary(
   final name = '${context.namespace.snakeCase}_client';
 
   return i1.Library(
+    docs: buildHeader('dart_2_17_client'),
     name: name,
     elements: () sync* {
       //
