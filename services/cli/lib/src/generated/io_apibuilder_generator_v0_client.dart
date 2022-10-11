@@ -22,13 +22,15 @@ class GeneratorResource {
     _i2.int limit = 100,
     _i2.int offset = 0,
   }) async {
-    final queryParameters = {'key': key, 'limit': limit, 'offset': offset};
+    final query = {
+      'key': key?.toString(),
+      'limit': limit.toString(),
+      'offset': offset.toString()
+    };
 
-    final uri = _i2.Uri(
-      host: 'https://api.apibuilder.io',
-      path: '/generators',
-      queryParameters: queryParameters,
-    );
+    final uri = _i2.Uri.parse(baseUrl)
+        .replace(path: '/generators')
+        .replace(queryParameters: query);
 
     final response = await client.get(uri);
 
@@ -46,10 +48,7 @@ class GeneratorResource {
   }
 
   _i2.Future<_i3.Generator> getByKey({required _i2.String key}) async {
-    final uri = _i2.Uri(
-      host: 'https://api.apibuilder.io',
-      path: '/generators/$key',
-    );
+    final uri = _i2.Uri.parse(baseUrl).replace(path: '/generators/$key');
 
     final response = await client.get(uri);
 
@@ -79,10 +78,7 @@ class HealthcheckResource {
   final _i2.String baseUrl;
 
   _i2.Future<_i3.Healthcheck> get() async {
-    final uri = _i2.Uri(
-      host: 'https://api.apibuilder.io',
-      path: '/_internal_/healthcheck',
-    );
+    final uri = _i2.Uri.parse(baseUrl).replace(path: '/_internal_/healthcheck');
 
     final response = await client.get(uri);
 
@@ -112,14 +108,11 @@ class InvocationResource {
     _i3.InvocationForm body, {
     required _i2.String key,
   }) async {
-    final uri = _i2.Uri(
-      host: 'https://api.apibuilder.io',
-      path: '/invocations/$key',
-    );
+    final uri = _i2.Uri.parse(baseUrl).replace(path: '/invocations/$key');
 
     final response = await client.post(
       uri,
-      body: body.toJson(),
+      body: _i4.jsonEncode(body),
     );
 
     switch (response.statusCode) {

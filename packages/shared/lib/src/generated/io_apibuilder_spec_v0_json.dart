@@ -5,11 +5,11 @@ import 'dart:core' as _i2;
 import 'package:equatable/equatable.dart' as _i1;
 import 'package:sealed_unions/sealed_unions.dart' as _i3;
 
-enum Method { get_, post, put, patch, delete, head, connect, options, trace }
+enum Method { GET, POST, PUT, PATCH, DELETE, HEAD, CONNECT, OPTIONS, TRACE }
 
-enum ParameterLocation { path, query, form, header }
+enum ParameterLocation { Path, Query, Form, Header }
 
-enum ResponseCodeOption { default_ }
+enum ResponseCodeOption { Default }
 
 class Annotation extends _i1.Equatable {
   const Annotation({

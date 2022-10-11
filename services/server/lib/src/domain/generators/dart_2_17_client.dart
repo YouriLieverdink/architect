@@ -188,14 +188,20 @@ i1.Method _buildOperation(
 
           for (final v in query) {
             final name = getName(v.name);
-            final parameterDef = context.find(v.type);
+            final parameterDef = context.find(
+              v.type,
+              isNullable: !v.required,
+            );
 
             arguments.addAll({
-              i1.LiteralString(name): parameterDef.deserializer(name),
+              i1.LiteralString(name): parameterDef //
+                  .deserializer(name)
+                  .property('toString', isNullSafe: !v.required)
+                  .invoke(),
             });
           }
 
-          yield const i1.Static('queryParameters') //
+          yield const i1.Static('query') //
               .declareFinal
               .assign(i1.Literal.of(arguments))
               .statement;
@@ -203,24 +209,23 @@ i1.Method _buildOperation(
 
         yield const i1.Static('');
 
-        final uri = i1.invoke(
-          const i1.TypeReference('Uri', url: 'dart:core'),
-          () sync* {
-            //
-            yield i1.Literal.of(context.service.baseUrl ?? '').named('host');
+        final path = operation //
+            .path
+            .replaceAll(':', r'$');
 
-            final path = operation //
-                .path
-                .replaceAll(':', r'$');
+        var uri = const i1.TypeReference('Uri', url: 'dart:core') //
+            .property('parse')
+            .invoke([const i1.Static('baseUrl')]);
 
-            yield i1.Literal.of(path).named('path');
+        uri = uri //
+            .property('replace')
+            .invoke([i1.Literal.of(path).named('path')]);
 
-            if (query.isNotEmpty) {
-              yield const i1.Static('queryParameters') //
-                  .named('queryParameters');
-            }
-          }(),
-        );
+        if (query.isNotEmpty) {
+          uri = uri //
+              .property('replace')
+              .invoke([const i1.Static('query').named('queryParameters')]);
+        }
 
         yield const i1.Static('uri') //
             .declareFinal
@@ -234,9 +239,9 @@ i1.Method _buildOperation(
           yield const i1.Static('uri');
 
           if (operation.body != null) {
-            final bodyDef = context.find(operation.body!.type);
-
-            yield bodyDef.deserializer('body').named('body');
+            yield const i1.TypeReference('jsonEncode', url: 'dart:convert')
+                .invoke([const i1.Static('body')]) //
+                .named('body');
           }
         }();
 
