@@ -80,10 +80,8 @@ i1.Enum buildEnum(
     values: () sync* {
       //
       for (final v in enum_.values) {
-        final name = getName(v.name);
-
         yield i1.EnumValue(
-          name,
+          v.name,
         );
       }
     }(),
