@@ -1,0 +1,7 @@
+code:
+  apicollective:
+    apibuilder-generator:
+      version: latest
+      generators:
+        - generator: dart_2_17_json
+          target: ./packages/architect/lib/src/generated/
