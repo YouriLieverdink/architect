@@ -6,9 +6,9 @@ class CreateListGenerators {
     this.generators,
   );
 
-  final List<InvokableGenerator> generators;
+  final List<Generator> generators;
 
-  Future<List<InvokableGenerator>> call() async {
+  Future<List<Generator>> call() async {
     return generators;
   }
 }

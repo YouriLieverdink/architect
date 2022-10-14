@@ -1,4 +1,7 @@
-import 'package:shared/shared.dart';
+import 'package:server/server.dart';
+
+// ignore: always_use_package_imports
+import '../../generated/io_apibuilder_spec_v0_json.dart' as i1;
 
 class BuildContext {
   //
@@ -10,11 +13,11 @@ class BuildContext {
 
   final String namespace;
 
-  final List<Service> services;
+  final List<i1.Service> services;
 
   final bool isLocal;
 
-  Service get service {
+  i1.Service get service {
     return services //
         .where((service) => service.namespace == namespace)
         .first;

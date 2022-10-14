@@ -1,1 +1,1 @@
-export './invokable_generator.dart';
+export './generator.dart';

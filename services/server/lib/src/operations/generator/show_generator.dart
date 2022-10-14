@@ -1,14 +1,17 @@
 import 'package:server/server.dart';
 
+// ignore: always_use_package_imports
+import '../../generated/io_apibuilder_generator_v0_json.dart' as i1;
+
 class CreateShowGenerator {
   //
   const CreateShowGenerator(
     this.generators,
   );
 
-  final List<InvokableGenerator> generators;
+  final List<Generator> generators;
 
-  Future<InvokableGenerator> call(
+  Future<Generator> call(
     String key,
   ) async {
     try {
@@ -17,7 +20,7 @@ class CreateShowGenerator {
           .first;
     } //
     catch (_) {
-      throw Error(
+      throw i1.Error(
         code: 'not-found',
         message: 'The generator with key $key was not found.',
       );

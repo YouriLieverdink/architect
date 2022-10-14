@@ -1,11 +1,12 @@
-import 'package:server/server.dart';
+// ignore: always_use_package_imports
+import '../../generated/io_apibuilder_generator_v0_json.dart' as i1;
 
 class CreateShowHealthcheck {
   //
   const CreateShowHealthcheck();
 
-  Future<Healthcheck> call() async {
-    return const Healthcheck(
+  Future<i1.Healthcheck> call() async {
+    return const i1.Healthcheck(
       status: 'healthy',
     );
   }

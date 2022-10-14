@@ -1,18 +1,21 @@
 import 'package:server/server.dart';
 
+// ignore: always_use_package_imports
+import '../../generated/io_apibuilder_generator_v0_json.dart' as i1;
+
 class CreateAddInvocation {
   //
   const CreateAddInvocation(
     this.showGenerator,
   );
 
-  final Future<InvokableGenerator> Function(
+  final Future<Generator> Function(
     String key,
   ) showGenerator;
 
-  Future<Invocation> call(
+  Future<i1.Invocation> call(
     String key,
-    InvocationForm form,
+    i1.InvocationForm form,
   ) async {
     final generator = await showGenerator(key);
 
@@ -20,7 +23,7 @@ class CreateAddInvocation {
       return generator.build(form);
     } //
     catch (e) {
-      throw Error(
+      throw i1.Error(
         code: 'invocation-error',
         message: e.toString(),
       );

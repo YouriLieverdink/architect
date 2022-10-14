@@ -1,6 +1,6 @@
 import 'package:orchestrator/orchestrator.dart';
 import 'package:recase/recase.dart';
-import 'package:shared/shared.dart';
+import 'package:server/server.dart';
 
 extension BuildReference on Definition {
   //

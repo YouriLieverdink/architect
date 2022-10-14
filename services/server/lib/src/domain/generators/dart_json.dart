@@ -1,18 +1,35 @@
+// ignore_for_file: always_use_package_imports
+
 import 'package:orchestrator/orchestrator.dart';
 import 'package:recase/recase.dart';
-import 'package:server/server.dart' as i1;
-import 'package:shared/shared.dart' as i2;
+import 'package:server/server.dart';
 
-enum DartJsonVersion { v215, v217 }
+import '../../generated/io_apibuilder_generator_v0_json.dart' as i1;
+import '../../generated/io_apibuilder_spec_v0_json.dart' as i2;
 
-class DartJson {
+const unions = [
+  'Nonet', 'Singlet', 'Doublet', 'Triplet', 'Quartet', 'Quintet', 'Sextet',
+  'Septet', 'Octet', 'Nonet', //
+];
+
+const factories = [
+  'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
+  'ninth' //
+];
+
+class DartJson extends Generator {
   //
   const DartJson({
-    required this.version,
-  });
+    required super.key,
+    required super.name,
+    required super.version,
+  }) : super(
+          description: 'Classes with toJson, fromJson, and copyWith methods.',
+          language: 'dart',
+          attributes: const [],
+        );
 
-  final DartJsonVersion version;
-
+  @override
   i1.Invocation build(
     i1.InvocationForm form,
   ) {
@@ -32,7 +49,7 @@ class DartJson {
     String namespace,
     List<i2.Service> services,
   ) {
-    final context = i2.BuildContext(
+    final context = BuildContext(
       namespace: namespace,
       services: services,
     );
@@ -41,12 +58,12 @@ class DartJson {
 
     return i1.File(
       name: '${context.namespace.snakeCase}_json.dart',
-      contents: i2.emit(library),
+      contents: emit(library),
     );
   }
 
   Library buildLibrary(
-    i2.BuildContext context,
+    BuildContext context,
   ) {
     final name = '${context.namespace.snakeCase}_json';
 
@@ -70,7 +87,7 @@ class DartJson {
   }
 
   Enum buildEnum(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Enum enum_,
   ) {
     final enumDef = context.find(enum_.name);
@@ -89,7 +106,7 @@ class DartJson {
   }
 
   Class buildModel(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     final modelDef = context.find(model.name);
@@ -107,7 +124,7 @@ class DartJson {
       fields: () sync* {
         //
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
           final fieldDef = context.find(
             v.type,
             isNullable: !v.required,
@@ -129,7 +146,7 @@ class DartJson {
   }
 
   Constructor buildModelConstructor(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     return Constructor(
@@ -137,7 +154,7 @@ class DartJson {
       parameters: () sync* {
         //
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
 
           yield Parameter(
             name: name,
@@ -151,7 +168,7 @@ class DartJson {
   }
 
   Constructor buildModelFromJson(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     final modelDef = context.find(model.name);
@@ -173,7 +190,7 @@ class DartJson {
         final List<Builder> arguments = [];
 
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
           final fieldDef = context.find(
             v.type,
             isNullable: !v.required,
@@ -196,7 +213,7 @@ class DartJson {
   }
 
   Method buildModelToJson(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     return Method(
@@ -210,7 +227,7 @@ class DartJson {
         final Map<Builder, Builder> arguments = {};
 
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
           final fieldDef = context.find(
             v.type,
             isNullable: !v.required,
@@ -229,7 +246,7 @@ class DartJson {
   }
 
   Method buildCopyWith(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     final modelDef = context.find(model.name);
@@ -240,7 +257,7 @@ class DartJson {
       parameters: () sync* {
         //
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
           final fieldDef = context.find(
             v.type,
             isNullable: true,
@@ -258,7 +275,7 @@ class DartJson {
         final List<Builder> arguments = [];
 
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
 
           arguments.add(
             Static(name) //
@@ -277,7 +294,7 @@ class DartJson {
   }
 
   Method buildModelProps(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Model model,
   ) {
     return Method(
@@ -307,7 +324,7 @@ class DartJson {
         final List<Builder> arguments = [];
 
         for (final v in model.fields) {
-          final name = i2.getName(v.name);
+          final name = getName(v.name);
 
           arguments.add(
             Static(name),
@@ -322,7 +339,7 @@ class DartJson {
   }
 
   Class buildUnion(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Union union,
   ) {
     final unionDef = context.find(union.name);
@@ -348,7 +365,7 @@ class DartJson {
       constructors: () sync* {
         //
         switch (version) {
-          case DartJsonVersion.v215:
+          case GeneratorVersion.v215:
             yield Constructor(
               name: '_',
               parameters: [
@@ -379,7 +396,7 @@ class DartJson {
             );
             break;
 
-          case DartJsonVersion.v217:
+          case GeneratorVersion.v217:
             yield const Constructor(
               name: '_',
               parameters: [
@@ -403,7 +420,7 @@ class DartJson {
           assign: () {
             //
             final reference = TypeReference(
-              i1.unions[n],
+              unions[n],
               url: 'package:sealed_unions/sealed_unions.dart',
               types: () sync* {
                 //
@@ -426,7 +443,7 @@ class DartJson {
   }
 
   Constructor buildUnionFromJson(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Union union,
   ) {
     final unionDef = context.find(union.name);
@@ -490,12 +507,12 @@ class DartJson {
                     //
                     final selector = "json['$discriminator']";
 
-                    final a = typeDef.type is i2.ModelTypeConfig //
+                    final a = typeDef.type is ModelTypeConfig //
                         ? typeDef.serializer(selector)
                         : typeDef.serializer("$selector['value']");
 
                     final b = const Static('factory') //
-                        .property(i1.factories[index])
+                        .property(factories[index])
                         .invoke([a]);
 
                     return unionDef //
@@ -527,7 +544,7 @@ class DartJson {
   }
 
   Method buildUnionToJson(
-    i2.BuildContext context,
+    BuildContext context,
     i2.Union union,
   ) {
     return Method(
@@ -551,7 +568,7 @@ class DartJson {
               ],
               body: () {
                 //
-                final a = typeDef.type is i2.ModelTypeConfig //
+                final a = typeDef.type is ModelTypeConfig //
                     ? typeDef.deserializer('v')
                     : LiteralMap({
                         Literal.of('value'): typeDef.deserializer('v'),

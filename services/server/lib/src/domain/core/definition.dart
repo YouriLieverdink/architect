@@ -1,4 +1,4 @@
-import 'package:shared/shared.dart';
+import 'package:server/server.dart';
 
 class Definition {
   //

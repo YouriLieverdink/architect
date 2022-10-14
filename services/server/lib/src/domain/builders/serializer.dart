@@ -1,9 +1,9 @@
-import 'package:orchestrator/orchestrator.dart' as i1;
-import 'package:shared/shared.dart';
+import 'package:orchestrator/orchestrator.dart';
+import 'package:server/server.dart';
 
 extension BuildSerializer on Definition {
   //
-  i1.Builder serializer(
+  Builder serializer(
     String name,
   ) {
     return buildSerializer(
@@ -15,7 +15,7 @@ extension BuildSerializer on Definition {
   }
 }
 
-i1.Builder buildSerializer(
+Builder buildSerializer(
   String name,
   String namespace,
   TypeConfig type, {
@@ -28,10 +28,10 @@ i1.Builder buildSerializer(
   );
 
   if (type is ArrayTypeConfig) {
-    final closure = i1.Method(
+    final closure = Method(
       lambda: true,
       parameters: const [
-        i1.Parameter(name: 'v'),
+        Parameter(name: 'v'),
       ],
       body: buildSerializer(
         'v',
@@ -41,9 +41,9 @@ i1.Builder buildSerializer(
       ),
     );
 
-    return i1.Static(name)
+    return Static(name)
         .as(
-          i1.TypeReference(
+          TypeReference(
             'List',
             url: 'dart:core',
             isNullable: type.isNullable,
@@ -56,16 +56,16 @@ i1.Builder buildSerializer(
   }
 
   if (type is MapTypeConfig) {
-    final closure = i1.Method(
+    final closure = Method(
       lambda: true,
       parameters: const [
-        i1.Parameter(name: 'k'),
-        i1.Parameter(name: 'v'),
+        Parameter(name: 'k'),
+        Parameter(name: 'v'),
       ],
-      body: i1.invoke(
-        const i1.TypeReference('MapEntry', url: 'dart:core'),
+      body: invoke(
+        const TypeReference('MapEntry', url: 'dart:core'),
         [
-          const i1.Static('k'),
+          const Static('k'),
           buildSerializer(
             'v',
             namespace,
@@ -76,9 +76,9 @@ i1.Builder buildSerializer(
       ),
     );
 
-    return i1.Static(name) //
+    return Static(name) //
         .as(
-          i1.TypeReference(
+          TypeReference(
             'Map',
             url: 'dart:core',
             isNullable: type.isNullable,
@@ -89,7 +89,7 @@ i1.Builder buildSerializer(
   }
 
   if (type is PrimitiveTypeConfig) {
-    final string = i1.TypeReference(
+    final string = TypeReference(
       'String',
       url: 'dart:core',
       isNullable: type.isNullable,
@@ -98,59 +98,59 @@ i1.Builder buildSerializer(
     switch (type.value) {
       case 'date-iso8601':
       case 'date-time-iso8601':
-        return const i1.TypeReference('DateTime', url: 'dart:core')
+        return const TypeReference('DateTime', url: 'dart:core')
             .property(type.isNullable ? 'tryParse' : 'parse')
-            .invoke([i1.Static(name).as(string)]);
+            .invoke([Static(name).as(string)]);
 
       default:
-        return i1.Static(name).as(reference);
+        return Static(name).as(reference);
     }
   }
 
   if (type is ModelTypeConfig) {
     final closure = reference //
         .property('fromJson')
-        .invoke([i1.Static(name)]);
+        .invoke([Static(name)]);
 
     if (type.isNullable) {
-      return i1.Static(name) //
-          .equalTo(const i1.LiteralNull())
-          .conditional(const i1.LiteralNull(), closure);
+      return Static(name) //
+          .equalTo(const LiteralNull())
+          .conditional(const LiteralNull(), closure);
     }
 
     return closure;
   }
 
   if (type is EnumTypeConfig) {
-    const string = i1.TypeReference('String', url: 'dart:core');
+    const string = TypeReference('String', url: 'dart:core');
 
     final closure = reference //
         .property('values')
         .property('byName')
-        .invoke([i1.Static(name).as(string)]);
+        .invoke([Static(name).as(string)]);
 
     if (type.isNullable) {
-      return i1.Static(name) //
-          .equalTo(const i1.LiteralNull())
-          .conditional(const i1.LiteralNull(), closure);
+      return Static(name) //
+          .equalTo(const LiteralNull())
+          .conditional(const LiteralNull(), closure);
     }
 
     return closure;
   }
 
-  if (type is UnionType) {
+  if (type is UnionTypeConfig) {
     final closure = reference //
         .property('fromJson')
-        .invoke([i1.Static(name)]);
+        .invoke([Static(name)]);
 
     if (type.isNullable) {
-      return i1.Static(name) //
-          .equalTo(const i1.LiteralNull())
-          .conditional(const i1.LiteralNull(), closure);
+      return Static(name) //
+          .equalTo(const LiteralNull())
+          .conditional(const LiteralNull(), closure);
     }
 
     return closure;
   }
 
-  return i1.Static(name);
+  return Static(name);
 }

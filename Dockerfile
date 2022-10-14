@@ -2,9 +2,6 @@ FROM dart:stable as base
 
 WORKDIR /usr/app
 
-# Resolve local dependencies
-COPY ./packages/shared ./packages/shared
-
 COPY ./services/server ./services/server
 
 WORKDIR /usr/app/services/server
