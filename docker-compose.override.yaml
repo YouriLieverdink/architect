@@ -1,9 +1,0 @@
-version: "3"
-
-services:
-  server:
-    build:
-      target: base
-    command: dart run --enable-vm-service ./bin/server.dart
-    volumes:
-      - ./services/server/lib:/usr/app/services/server/lib
