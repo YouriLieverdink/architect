@@ -3,5 +3,10 @@ code:
     apibuilder-generator:
       version: latest
       generators:
+        # Architect
         - generator: dart_2_17_json
           target: ./packages/architect/lib/src/generated/
+
+        # Architect server
+        - generator: dart_2_17_json
+          target: ./packages/architect_server/lib/src/generated/

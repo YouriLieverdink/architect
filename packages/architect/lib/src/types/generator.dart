@@ -21,7 +21,18 @@ abstract class Generator extends i1.Generator {
 
   final DartVersion version;
 
-  i1.Invocation call(
+  ///
+  dynamic call(
+    dynamic json,
+  ) {
+    final form = i1.InvocationForm.fromJson(json);
+    final invocation = build(form);
+
+    return invocation.toJson();
+  }
+
+  ///
+  i1.Invocation build(
     i1.InvocationForm form,
   );
 }
