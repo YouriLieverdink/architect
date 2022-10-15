@@ -7,6 +7,12 @@ code:
         - generator: dart_2_17_json
           target: ./packages/architect/lib/src/generated/
 
+        # Architect cli
+        - generator: dart_2_17_json
+          target: ./packages/architect_cli/lib/src/generated/
+        - generator: dart_2_17_client
+          target: ./packages/architect_cli/lib/src/generated/
+
         # Architect server
         - generator: dart_2_17_json
           target: ./packages/architect_server/lib/src/generated/
