@@ -71,7 +71,7 @@ TypeReference buildReference(
         return base('String');
 
       case 'unit':
-        return base('void');
+        return const TypeReference('void');
 
       default:
         return base('dynamic');
