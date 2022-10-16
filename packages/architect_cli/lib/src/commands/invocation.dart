@@ -25,7 +25,7 @@ class InvocationCommand extends Command {
     }
 
     try {
-      final json = await File('../../assets/form.json').readAsJson();
+      final json = await File('../../assets/service.json').readAsJson();
       final form = i1.InvocationForm.fromJson(json);
 
       final data = await client.invocations.postByKey(form, key: key);
