@@ -232,9 +232,11 @@ class DartClient extends Generator {
               .property('parse')
               .invoke([const Static('baseUrl')]);
 
-          uri = uri //
-              .property('replace')
-              .invoke([Literal.of(path).named('path')]);
+          if (path.isNotEmpty && path != '/') {
+            uri = uri //
+                .property('replace')
+                .invoke([Literal.of(path).named('path')]);
+          }
 
           if (query.isNotEmpty) {
             uri = uri //
