@@ -56,6 +56,18 @@ class DartClient extends Generator {
 
     return Library(
       name: name,
+      docs: () sync* {
+        //
+        if (context.service.description != null) {
+          yield Docs('{@template $name}');
+
+          if (context.service.description != null) {
+            yield buildDescription(context.service.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       elements: () sync* {
         //
         for (final v in context.service.resources) {
@@ -75,10 +87,28 @@ class DartClient extends Generator {
 
     return Class(
       name: '${resourceDef.reference.symbol}Resource',
+      docs: () sync* {
+        //
+        if (resource.description != null) {
+          yield Docs('{@template ${resource.type}}');
+
+          if (resource.description != null) {
+            yield buildDescription(resource.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       constructors: () sync* {
         //
         yield Constructor(
           isConst: true,
+          docs: () sync* {
+            //
+            if (resource.description != null) {
+              yield Docs('{@macro ${resource.type}}');
+            }
+          }(),
           parameters: () sync* {
             //
             yield const Parameter(
@@ -144,6 +174,12 @@ class DartClient extends Generator {
 
     return Method(
       name: name,
+      docs: () sync* {
+        //
+        if (operation.description != null) {
+          yield buildDescription(operation.description!);
+        }
+      }(),
       annotations: () sync* {
         //
         if (operation.deprecation != null) {
@@ -429,6 +465,12 @@ class DartClient extends Generator {
               //
               if (v.deprecation != null) {
                 yield buildDeprecation(v.deprecation!);
+              }
+            }(),
+            docs: () sync* {
+              //
+              if (v.description != null) {
+                yield Docs('{@macro ${v.type}}');
               }
             }(),
             name: v.plural.camelCase,

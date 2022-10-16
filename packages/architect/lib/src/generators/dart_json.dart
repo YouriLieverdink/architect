@@ -57,6 +57,18 @@ class DartJson extends Generator {
 
     return Library(
       name: name,
+      docs: () sync* {
+        //
+        if (context.service.description != null) {
+          yield Docs('{@template $name}');
+
+          if (context.service.description != null) {
+            yield buildDescription(context.service.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       elements: () sync* {
         //
         for (final v in context.service.enums) {
@@ -88,6 +100,18 @@ class DartJson extends Generator {
           yield buildDeprecation(enum_.deprecation!);
         }
       }(),
+      docs: () sync* {
+        //
+        if (enum_.description != null) {
+          yield Docs('{@template ${enum_.name}}');
+
+          if (enum_.description != null) {
+            yield buildDescription(enum_.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       values: () sync* {
         //
         for (final v in enum_.values) {
@@ -97,6 +121,18 @@ class DartJson extends Generator {
               //
               if (enum_.deprecation != null) {
                 yield buildDeprecation(v.deprecation!);
+              }
+            }(),
+            docs: () sync* {
+              //
+              if (v.description != null) {
+                yield Docs('{@template ${v.name}}');
+
+                if (v.description != null) {
+                  yield buildDescription(v.description!);
+                }
+
+                yield const Docs('{@endtemplate}');
               }
             }(),
           );
@@ -117,6 +153,18 @@ class DartJson extends Generator {
         //
         if (model.deprecation != null) {
           yield buildDeprecation(model.deprecation!);
+        }
+      }(),
+      docs: () sync* {
+        //
+        if (model.description != null) {
+          yield Docs('{@template ${model.name}}');
+
+          if (model.description != null) {
+            yield buildDescription(model.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
         }
       }(),
       extends_: const TypeReference(
@@ -146,6 +194,12 @@ class DartJson extends Generator {
                 yield buildDeprecation(v.deprecation!);
               }
             }(),
+            docs: () sync* {
+              //
+              if (v.description != null) {
+                yield buildDescription(v.description!);
+              }
+            }(),
           );
         }
       }(),
@@ -163,6 +217,12 @@ class DartJson extends Generator {
   ) {
     return Constructor(
       isConst: true,
+      docs: () sync* {
+        //
+        if (model.description != null) {
+          yield Docs('{@macro ${model.name}}');
+        }
+      }(),
       parameters: () sync* {
         //
         for (final v in model.fields) {
@@ -373,6 +433,12 @@ class DartJson extends Generator {
 
     return Class(
       name: unionDef.reference.symbol,
+      docs: () sync* {
+        //
+        if (union.description != null) {
+          yield buildDescription(union.description!);
+        }
+      }(),
       extends_: TypeReference(
         'Union${n}Impl',
         url: 'package:sealed_unions/sealed_unions.dart',
