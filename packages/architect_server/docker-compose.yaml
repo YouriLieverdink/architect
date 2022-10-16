@@ -6,6 +6,6 @@ services:
       context: ../../
       dockerfile: ./packages/architect_server/Dockerfile
       target: prod
-    image: yourilieverdink/builders_server:${TAG:-latest}
+    image: yourilieverdink/architect:${TAG:-latest}
     ports:
       - "8000:8080"
