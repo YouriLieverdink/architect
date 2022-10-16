@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  server:
+    build:
+      target: base
+    command: dart run --enable-vm-service ./bin/architect_server.dart
+    volumes:
+      - ./lib:/usr/app/packages/architect_server/lib
+      - ../../packages/architect/lib:/usr/app/packages/architect/lib

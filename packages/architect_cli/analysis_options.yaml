@@ -1,0 +1,9 @@
+include: package:lint/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - lib/src/generated/**
+
+linter:
+  rules:
+    always_use_package_imports: false

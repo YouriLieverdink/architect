@@ -6,7 +6,3 @@ github:
       branches:
         - main
     pull_request:
-
-merge_stages:
-  - analyze_and_format
-  - test

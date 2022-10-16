@@ -1,15 +1,18 @@
-settings:
-  code.create.directories: true
-
 code:
   apicollective:
     apibuilder-generator:
       version: latest
       generators:
+        # Architect
         - generator: dart_2_17_json
-          target: ./services/server/lib/src/generated/
+          target: ./packages/architect/lib/src/generated/
 
+        # Architect cli
         - generator: dart_2_17_json
-          target: ./services/cli/lib/src/generated/
+          target: ./packages/architect_cli/lib/src/generated/
         - generator: dart_2_17_client
-          target: ./services/cli/lib/src/generated/
+          target: ./packages/architect_cli/lib/src/generated/
+
+        # Architect server
+        - generator: dart_2_17_json
+          target: ./packages/architect_server/lib/src/generated/
