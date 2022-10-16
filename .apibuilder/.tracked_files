@@ -13,3 +13,9 @@ apicollective:
     - "./packages/architect_server/lib/src/generated/io_apibuilder_common_v0_json.dart"
     - "./packages/architect_server/lib/src/generated/io_apibuilder_generator_v0_json.dart"
     - "./packages/architect_server/lib/src/generated/io_apibuilder_spec_v0_json.dart"
+pipbo:
+  slack:
+    dart_2_17_client:
+    - "./packages/architect_server/lib/src/generated/nl_pipbo_slack_v0_client.dart"
+    dart_2_17_json:
+    - "./packages/architect_server/lib/src/generated/nl_pipbo_slack_v0_json.dart"

@@ -16,3 +16,13 @@ code:
         # Architect server
         - generator: dart_2_17_json
           target: ./packages/architect_server/lib/src/generated/
+
+  pipbo:
+    slack:
+      version: latest
+      generators:
+        # Architect server
+        - generator: dart_2_17_json
+          target: ./packages/architect_server/lib/src/generated/
+        - generator: dart_2_17_client
+          target: ./packages/architect_server/lib/src/generated/
