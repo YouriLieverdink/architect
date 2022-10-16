@@ -144,6 +144,12 @@ class DartClient extends Generator {
 
     return Method(
       name: name,
+      annotations: () sync* {
+        //
+        if (operation.deprecation != null) {
+          yield buildDeprecation(operation.deprecation!);
+        }
+      }(),
       modifier: MethodMofifier.async,
       returns: () {
         //
@@ -167,6 +173,12 @@ class DartClient extends Generator {
           yield Parameter(
             name: 'body',
             type: bodyDef.reference,
+            annotations: () sync* {
+              //
+              if (operation.body!.deprecation != null) {
+                yield buildDeprecation(operation.body!.deprecation!);
+              }
+            }(),
           );
         }
 
@@ -186,6 +198,12 @@ class DartClient extends Generator {
               //
               if (v.default_ != null) {
                 return Static(v.default_!);
+              }
+            }(),
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
               }
             }(),
           );
@@ -407,6 +425,12 @@ class DartClient extends Generator {
           final resourceDef = context.find(v.type);
 
           yield Method(
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
             name: v.plural.camelCase,
             kind: MethodKind.get,
             returns: TypeReference(

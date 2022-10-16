@@ -82,11 +82,23 @@ class DartJson extends Generator {
 
     return Enum(
       name: enumDef.reference.symbol,
+      annotations: () sync* {
+        //
+        if (enum_.deprecation != null) {
+          yield buildDeprecation(enum_.deprecation!);
+        }
+      }(),
       values: () sync* {
         //
         for (final v in enum_.values) {
           yield EnumValue(
             v.name,
+            annotations: () sync* {
+              //
+              if (enum_.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
@@ -101,6 +113,12 @@ class DartJson extends Generator {
 
     return Class(
       name: modelDef.reference.symbol,
+      annotations: () sync* {
+        //
+        if (model.deprecation != null) {
+          yield buildDeprecation(model.deprecation!);
+        }
+      }(),
       extends_: const TypeReference(
         'Equatable',
         url: 'package:equatable/equatable.dart',
@@ -122,6 +140,12 @@ class DartJson extends Generator {
             name: name,
             modifier: FieldModifier.final_,
             type: fieldDef.reference,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
@@ -149,6 +173,12 @@ class DartJson extends Generator {
             kind: ParameterKind.named,
             isToThis: true,
             isRequired: v.required,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
@@ -255,6 +285,12 @@ class DartJson extends Generator {
             name: name,
             type: fieldDef.reference,
             kind: ParameterKind.named,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
