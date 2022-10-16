@@ -7,5 +7,7 @@ services:
       dockerfile: ./packages/architect_server/Dockerfile
       target: prod
     image: yourilieverdink/architect:${TAG:-latest}
+    environment:
+      - SLACK_WEBHOOK_URL=
     ports:
       - "8000:8080"
