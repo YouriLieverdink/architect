@@ -111,7 +111,7 @@ class Field extends _i1.Equatable {
 
 class Message extends _i1.Equatable {
   const Message({
-    required this.text,
+    this.text,
     this.username,
     this.iconUrl,
     this.channel,
@@ -120,7 +120,7 @@ class Message extends _i1.Equatable {
 
   factory Message.fromJson(_i2.dynamic json) {
     return Message(
-      text: (json['text'] as _i2.String),
+      text: (json['text'] as _i2.String?),
       username: (json['username'] as _i2.String?),
       iconUrl: (json['icon_url'] as _i2.String?),
       channel: (json['channel'] as _i2.String?),
@@ -130,7 +130,7 @@ class Message extends _i1.Equatable {
     );
   }
 
-  final _i2.String text;
+  final _i2.String? text;
 
   final _i2.String? username;
 
