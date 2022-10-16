@@ -89,8 +89,10 @@ Builder buildDeserializer(
   }
 
   if (type is EnumTypeConfig) {
-    return Static(name) //
-        .property('name', isNullSafe: type.isNullable);
+    final ref = buildReference(namespace, type, isLocal: isLocal);
+
+    return Static('${ref.symbol}EnumMap') //
+        .index(Static(name));
   }
 
   if (type is UnionTypeConfig) {

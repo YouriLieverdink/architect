@@ -72,6 +72,7 @@ class DartJson extends Generator {
       elements: () sync* {
         //
         for (final v in context.service.enums) {
+          yield buildEnumMap(context, v);
           yield buildEnum(context, v);
         }
 
@@ -84,6 +85,28 @@ class DartJson extends Generator {
         }
       }(),
     );
+  }
+
+  Element buildEnumMap(
+    BuildContext context,
+    i2.Enum enum_,
+  ) {
+    final enumDef = context.find(enum_.name);
+
+    final Map<Builder, Builder> arguments = {};
+
+    for (final v in enum_.values) {
+      final name = getName(v.name);
+
+      arguments.addAll({
+        enumDef.reference.property(name): Literal.of(v.name),
+      });
+    }
+
+    return Static('${enumDef.reference.symbol}EnumMap')
+        .declareConst
+        .assign(Literal.of(arguments))
+        .statement;
   }
 
   Enum buildEnum(
@@ -115,8 +138,10 @@ class DartJson extends Generator {
       values: () sync* {
         //
         for (final v in enum_.values) {
+          final name = getName(v.name);
+
           yield EnumValue(
-            v.name,
+            name,
             annotations: () sync* {
               //
               if (enum_.deprecation != null) {

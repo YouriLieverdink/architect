@@ -124,10 +124,21 @@ Builder buildSerializer(
   if (type is EnumTypeConfig) {
     const string = TypeReference('String', url: 'dart:core');
 
-    final closure = reference //
-        .property('values')
-        .property('byName')
-        .invoke([Static(name).as(string)]);
+    final filter = Method(
+      lambda: true,
+      parameters: const [
+        Parameter(name: 'v'),
+      ],
+      body: const Static('v') //
+          .property('value')
+          .equalTo(Static(name).as(string)),
+    );
+
+    final closure = Static('${reference.symbol}EnumMap') //
+        .property('entries')
+        .property('firstWhere')
+        .invoke([filter]) //
+        .property('key');
 
     if (type.isNullable) {
       return Static(name) //
