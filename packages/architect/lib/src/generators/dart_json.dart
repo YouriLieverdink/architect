@@ -57,6 +57,18 @@ class DartJson extends Generator {
 
     return Library(
       name: name,
+      docs: () sync* {
+        //
+        if (context.service.description != null) {
+          yield Docs('{@template $name}');
+
+          if (context.service.description != null) {
+            yield buildDescription(context.service.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       elements: () sync* {
         //
         for (final v in context.service.enums) {
@@ -82,11 +94,47 @@ class DartJson extends Generator {
 
     return Enum(
       name: enumDef.reference.symbol,
+      annotations: () sync* {
+        //
+        if (enum_.deprecation != null) {
+          yield buildDeprecation(enum_.deprecation!);
+        }
+      }(),
+      docs: () sync* {
+        //
+        if (enum_.description != null) {
+          yield Docs('{@template ${enum_.name}}');
+
+          if (enum_.description != null) {
+            yield buildDescription(enum_.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       values: () sync* {
         //
         for (final v in enum_.values) {
           yield EnumValue(
             v.name,
+            annotations: () sync* {
+              //
+              if (enum_.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
+            docs: () sync* {
+              //
+              if (v.description != null) {
+                yield Docs('{@template ${v.name}}');
+
+                if (v.description != null) {
+                  yield buildDescription(v.description!);
+                }
+
+                yield const Docs('{@endtemplate}');
+              }
+            }(),
           );
         }
       }(),
@@ -101,6 +149,24 @@ class DartJson extends Generator {
 
     return Class(
       name: modelDef.reference.symbol,
+      annotations: () sync* {
+        //
+        if (model.deprecation != null) {
+          yield buildDeprecation(model.deprecation!);
+        }
+      }(),
+      docs: () sync* {
+        //
+        if (model.description != null) {
+          yield Docs('{@template ${model.name}}');
+
+          if (model.description != null) {
+            yield buildDescription(model.description!);
+          }
+
+          yield const Docs('{@endtemplate}');
+        }
+      }(),
       extends_: const TypeReference(
         'Equatable',
         url: 'package:equatable/equatable.dart',
@@ -122,6 +188,18 @@ class DartJson extends Generator {
             name: name,
             modifier: FieldModifier.final_,
             type: fieldDef.reference,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
+            docs: () sync* {
+              //
+              if (v.description != null) {
+                yield buildDescription(v.description!);
+              }
+            }(),
           );
         }
       }(),
@@ -139,6 +217,12 @@ class DartJson extends Generator {
   ) {
     return Constructor(
       isConst: true,
+      docs: () sync* {
+        //
+        if (model.description != null) {
+          yield Docs('{@macro ${model.name}}');
+        }
+      }(),
       parameters: () sync* {
         //
         for (final v in model.fields) {
@@ -149,6 +233,12 @@ class DartJson extends Generator {
             kind: ParameterKind.named,
             isToThis: true,
             isRequired: v.required,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
@@ -255,6 +345,12 @@ class DartJson extends Generator {
             name: name,
             type: fieldDef.reference,
             kind: ParameterKind.named,
+            annotations: () sync* {
+              //
+              if (v.deprecation != null) {
+                yield buildDeprecation(v.deprecation!);
+              }
+            }(),
           );
         }
       }(),
@@ -337,6 +433,12 @@ class DartJson extends Generator {
 
     return Class(
       name: unionDef.reference.symbol,
+      docs: () sync* {
+        //
+        if (union.description != null) {
+          yield buildDescription(union.description!);
+        }
+      }(),
       extends_: TypeReference(
         'Union${n}Impl',
         url: 'package:sealed_unions/sealed_unions.dart',
