@@ -1,3 +1,6 @@
+/// {@template io_apibuilder_generator_v0_json}
+/// Documentation for an apibuilder code generator API
+/// {@endtemplate}
 library io_apibuilder_generator_v0_json;
 
 import 'dart:core' as _i2;
@@ -6,9 +9,27 @@ import 'package:equatable/equatable.dart' as _i1;
 
 import './io_apibuilder_spec_v0_json.dart' as _i3;
 
-enum FileFlag { scaffolding }
+/// {@template file_flag}
+/// Allows generator authors to flag files with special characteristics. It is
+/// up to the client (i.e. the cli) to decide how to interpret them.
+/// {@endtemplate}
+enum FileFlag {
+  /// {@template scaffolding}
+  /// Indicates files that an end user starts from but should edit. Not intended
+  /// to be the final product (see:
+  /// https://stackoverflow.com/questions/235018/what-is-scaffolding-is-it-a-term-for-a-particular-platform).
+  /// Consider not overwriting these files when code is re-generated.
+  /// {@endtemplate}
+  scaffolding
+}
 
+/// {@template attribute}
+/// An attribute represents a key/value pair that is optionally used to provide
+/// additional instructions / data to the code generator. An example could
+/// be an attribute to specify the root import path for a go client..
+/// {@endtemplate}
 class Attribute extends _i1.Equatable {
+  /// {@macro attribute}
   const Attribute({
     required this.name,
     required this.value,
@@ -58,8 +79,10 @@ class Error extends _i1.Equatable {
     );
   }
 
+  /// Machine readable code for this specific error message
   final _i2.String code;
 
+  /// Description of the error
   final _i2.String message;
 
   _i2.dynamic toJson() {
@@ -82,7 +105,11 @@ class Error extends _i1.Equatable {
   }
 }
 
+/// {@template file}
+/// Represents a source file
+/// {@endtemplate}
 class File extends _i1.Equatable {
+  /// {@macro file}
   const File({
     required this.name,
     this.dir,
@@ -101,10 +128,13 @@ class File extends _i1.Equatable {
     );
   }
 
+  /// The recommended name for the file.
   final _i2.String name;
 
+  /// The recommended directory path for the file where appropriate.
   final _i2.String? dir;
 
+  /// The actual source code.
   final _i2.String contents;
 
   final _i2.List<FileFlag>? flags;
@@ -138,7 +168,11 @@ class File extends _i1.Equatable {
   }
 }
 
+/// {@template generator}
+/// The generator metadata.
+/// {@endtemplate}
 class Generator extends _i1.Equatable {
+  /// {@macro generator}
   const Generator({
     required this.key,
     required this.name,
@@ -163,10 +197,15 @@ class Generator extends _i1.Equatable {
 
   final _i2.String name;
 
+  /// A comma separate list of the programming language(s) that this generator
+  /// produces
   final _i2.String? language;
 
   final _i2.String? description;
 
+  /// The list of attributes that this code generator can use. You can find the
+  /// full list of available attributes and their descriptions at
+  /// http://apibuilder.io/doc/attributes
   final _i2.List<_i2.String> attributes;
 
   _i2.dynamic toJson() {
@@ -224,9 +263,13 @@ class Healthcheck extends _i1.Equatable {
   }
 }
 
+/// {@template invocation}
+/// The result of invoking a generator.
+/// {@endtemplate}
 class Invocation extends _i1.Equatable {
+  /// {@macro invocation}
   const Invocation({
-    required this.source,
+    @_i2.Deprecated('Use files instead') required this.source,
     required this.files,
   });
 
@@ -237,8 +280,11 @@ class Invocation extends _i1.Equatable {
     );
   }
 
+  /// The actual source code.
+  @_i2.Deprecated('Use files instead')
   final _i2.String source;
 
+  /// A collection of source files
   final _i2.List<File> files;
 
   _i2.dynamic toJson() {
@@ -246,7 +292,7 @@ class Invocation extends _i1.Equatable {
   }
 
   Invocation copyWith({
-    _i2.String? source,
+    @_i2.Deprecated('Use files instead') _i2.String? source,
     _i2.List<File>? files,
   }) {
     return Invocation(
@@ -261,7 +307,12 @@ class Invocation extends _i1.Equatable {
   }
 }
 
+/// {@template invocation_form}
+/// The invocation form is the payload send to the code generators when
+/// requesting generation of client code.
+/// {@endtemplate}
 class InvocationForm extends _i1.Equatable {
+  /// {@macro invocation_form}
   const InvocationForm({
     required this.service,
     required this.attributes,

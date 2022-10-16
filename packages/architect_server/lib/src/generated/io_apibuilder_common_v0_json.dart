@@ -1,3 +1,6 @@
+/// {@template io_apibuilder_common_v0_json}
+/// Models in common across various APIs in apibuilder
+/// {@endtemplate}
 library io_apibuilder_common_v0_json;
 
 import 'dart:core' as _i2;
@@ -81,7 +84,11 @@ class Healthcheck extends _i1.Equatable {
   }
 }
 
+/// {@template reference}
+/// Represents a reference to another model.
+/// {@endtemplate}
 class Reference extends _i1.Equatable {
+  /// {@macro reference}
   const Reference({
     required this.guid,
     required this.key,

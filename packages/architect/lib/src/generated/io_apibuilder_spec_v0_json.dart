@@ -1,3 +1,6 @@
+/// {@template io_apibuilder_spec_v0_json}
+/// Specification of apibuilder api.json schema
+/// {@endtemplate}
 library io_apibuilder_spec_v0_json;
 
 import 'dart:core' as _i2;
@@ -11,7 +14,17 @@ enum ParameterLocation { Path, Query, Form, Header }
 
 enum ResponseCodeOption { Default }
 
+/// {@template annotation}
+/// Used to indicate an API concern for a field that is specific to the field's
+/// usage but not necessarily its data type. For example, you might use
+/// annotations to mark that certain fields contain PII or PCI data and thus
+/// should not be stored once processing is complete. Annotations
+/// communicate meaning to consumers of an API and may also be used within
+/// an implementation or tooling; for example, using static analysis tools
+/// to detect logging of sensitive data.
+/// {@endtemplate}
 class Annotation extends _i1.Equatable {
+  /// {@macro annotation}
   const Annotation({
     required this.name,
     this.description,
@@ -90,6 +103,7 @@ class Application extends _i1.Equatable {
     return Application(key: (json['key'] as _i2.String));
   }
 
+  /// Unique key identifying this application
   final _i2.String key;
 
   _i2.dynamic toJson() {
@@ -106,7 +120,17 @@ class Application extends _i1.Equatable {
   }
 }
 
+/// {@template attribute}
+/// Represents an additional attribute that is attached to one of the objects in
+/// apibuilder. The main use case is to capture additional metadata that
+/// doesn't necessarily define the API but aids in code generation. Examples
+/// would be hints for certain code generators about classes to extend,
+/// interfaces to implement, annotations to add, names to assign to certain
+/// methods, etc. The specific attributes will be applicable only in the
+/// context of the specific code generators usings them.
+/// {@endtemplate}
 class Attribute extends _i1.Equatable {
+  /// {@macro attribute}
   const Attribute({
     required this.name,
     required this.value,
@@ -220,7 +244,11 @@ class Body extends _i1.Equatable {
   }
 }
 
+/// {@template contact}
+/// Describes the primary contact for this service
+/// {@endtemplate}
 class Contact extends _i1.Equatable {
+  /// {@macro contact}
   const Contact({
     this.name,
     this.url,
@@ -263,7 +291,12 @@ class Contact extends _i1.Equatable {
   }
 }
 
+/// {@template deprecation}
+/// Indicates that this particular element is considered deprecated in the API.
+/// See the description for details
+/// {@endtemplate}
 class Deprecation extends _i1.Equatable {
+  /// {@macro deprecation}
   const Deprecation({this.description});
 
   factory Deprecation.fromJson(_i2.dynamic json) {
@@ -391,6 +424,8 @@ class EnumValue extends _i1.Equatable {
 
   final _i2.List<Attribute> attributes;
 
+  /// The actual string representation of this value. If not specified, defaults
+  /// to 'name'
   final _i2.String? value;
 
   _i2.dynamic toJson() {
@@ -633,7 +668,13 @@ class Header extends _i1.Equatable {
   }
 }
 
+/// {@template import}
+/// An import is used to declare a dependency on another application. This
+/// allows you to reference the models and or enums from that application in
+/// your own app.
+/// {@endtemplate}
 class Import extends _i1.Equatable {
+  /// {@macro import}
   const Import({
     required this.uri,
     required this.namespace,
@@ -668,24 +709,32 @@ class Import extends _i1.Equatable {
     );
   }
 
+  /// Full URI to the service.json file of the service we are importing
   final _i2.String uri;
 
+  /// the fully qualified namespace that we have imported
   final _i2.String namespace;
 
   final Organization organization;
 
   final Application application;
 
+  /// The version of the service that we are importing
   final _i2.String version;
 
+  /// Enums made available by this import
   final _i2.List<_i2.String> enums;
 
+  /// Interfaces made available by this import
   final _i2.List<_i2.String> interfaces;
 
+  /// Unions made available by this import
   final _i2.List<_i2.String> unions;
 
+  /// Models made available by this import
   final _i2.List<_i2.String> models;
 
+  /// Annotations made available by this import
   final _i2.List<Annotation> annotations;
 
   _i2.dynamic toJson() {
@@ -746,7 +795,11 @@ class Import extends _i1.Equatable {
   }
 }
 
+/// {@template info}
+/// General metadata about this service
+/// {@endtemplate}
 class Info extends _i1.Equatable {
+  /// {@macro info}
   const Info({
     this.license,
     this.contact,
@@ -858,7 +911,11 @@ class Interface extends _i1.Equatable {
   }
 }
 
+/// {@template license}
+/// Describes the software license contact for this service
+/// {@endtemplate}
 class License extends _i1.Equatable {
+  /// {@macro license}
   const License({
     required this.name,
     this.url,
@@ -1020,6 +1077,7 @@ class Operation extends _i1.Equatable {
 
   final Method method;
 
+  /// The full path to this operation, relative to the service's base url.
   final _i2.String path;
 
   final _i2.String? description;
@@ -1091,6 +1149,7 @@ class Organization extends _i1.Equatable {
     return Organization(key: (json['key'] as _i2.String));
   }
 
+  /// Unique key identifying the organization that owns this service
   final _i2.String key;
 
   _i2.dynamic toJson() {
@@ -1256,10 +1315,16 @@ class Resource extends _i1.Equatable {
     );
   }
 
+  /// The typeof this resource will map to a defined model, enum, or union type
   final _i2.String type;
 
   final _i2.String plural;
 
+  /// The path to this specific resource. This was added in 2016 to help us
+  /// differentiate between the resource path and the operation path which can
+  /// be helpful when, for example, generating method names for operations.
+  /// This field is optional as some of our input formats (e.g. swagger) do
+  /// not explicitly differentiate resoure paths.
   final _i2.String? path;
 
   final _i2.String? description;
@@ -1447,6 +1512,11 @@ class Service extends _i1.Equatable {
     );
   }
 
+  /// Documents that this is an apibuilder document, noting the specific version
+  /// used. Internally the version is then used for backwards compatibility
+  /// when applicable as new features are added to apibuilder. Note naming
+  /// refers to the original name of this project, 'apidoc', and is left here
+  /// to avoid a breaking change for preexisting services.
   final Apidoc apidoc;
 
   final _i2.String name;
@@ -1455,6 +1525,7 @@ class Service extends _i1.Equatable {
 
   final Application application;
 
+  /// Fully qualified namespace for this service
   final _i2.String namespace;
 
   final _i2.String version;
@@ -1610,12 +1681,19 @@ class Union extends _i1.Equatable {
 
   final _i2.String plural;
 
+  /// If a type discriminatoris provided, serialization of these union types will
+  /// always contain a field named with the value of the discriminatorthat
+  /// will contain the name of the type. This provides a simpler (for many use
+  /// cases) JSON serialization/deserialization mechanism. When specified,
+  /// apibuilder itself will verify that none of the types in the union type
+  /// itself contain a field with the same name as the discriminator
   final _i2.String? discriminator;
 
   final _i2.String? description;
 
   final Deprecation? deprecation;
 
+  /// The names of the types that make up this union type
   final _i2.List<UnionType> types;
 
   final _i2.List<Attribute> attributes;
@@ -1672,7 +1750,11 @@ class Union extends _i1.Equatable {
   }
 }
 
+/// {@template union_type}
+/// Metadata about one of the types that is part of a union type
+/// {@endtemplate}
 class UnionType extends _i1.Equatable {
+  /// {@macro union_type}
   const UnionType({
     required this.type,
     this.description,
@@ -1697,6 +1779,8 @@ class UnionType extends _i1.Equatable {
     );
   }
 
+  /// The name of a type(a primitive, model name, or enum name) that makes up this
+  /// union type
   final _i2.String type;
 
   final _i2.String? description;
@@ -1705,8 +1789,15 @@ class UnionType extends _i1.Equatable {
 
   final _i2.List<Attribute> attributes;
 
+  /// If true, indicates that this type should be used as the default when
+  /// deserializing union types. This field is only used by union types that
+  /// require a discriminator and sets the default value for that
+  /// discriminator during deserialization.
   final _i2.bool? default_;
 
+  /// The discriminator value defines the string to use in the discriminator field
+  /// to identify this type. If not specified, the discriminator value will
+  /// default to the name of the type itself.
   final _i2.String? discriminatorValue;
 
   _i2.dynamic toJson() {

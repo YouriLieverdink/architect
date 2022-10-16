@@ -1,3 +1,6 @@
+/// {@template io_apibuilder_generator_v0_client}
+/// Documentation for an apibuilder code generator API
+/// {@endtemplate}
 library io_apibuilder_generator_v0_client;
 
 import 'dart:convert' as _i4;
@@ -17,6 +20,7 @@ class GeneratorResource {
 
   final _i2.String baseUrl;
 
+  /// Get all available generators
   _i2.Future<_i2.List<_i3.Generator>> get({
     _i2.String? key,
     _i2.int limit = 100,
@@ -47,6 +51,7 @@ class GeneratorResource {
     }
   }
 
+  /// Get generator with this key
   _i2.Future<_i3.Generator> getByKey({required _i2.String key}) async {
     final uri = _i2.Uri.parse(baseUrl).replace(path: '/generators/$key');
 
@@ -104,6 +109,7 @@ class InvocationResource {
 
   final _i2.String baseUrl;
 
+  /// Invoke a generator
   _i2.Future<_i3.Invocation> postByKey(
     _i3.InvocationForm body, {
     required _i2.String key,
