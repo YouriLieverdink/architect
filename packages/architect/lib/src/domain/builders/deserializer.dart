@@ -20,18 +20,26 @@ Builder buildDeserializer(
   String namespace,
   TypeConfig type, {
   bool isLocal = false,
+  int depth = 0,
 }) {
+  final reference = buildReference(
+    namespace,
+    type,
+    isLocal: isLocal,
+  );
+
   if (type is ArrayTypeConfig) {
     final closure = Method(
       lambda: true,
-      parameters: const [
-        Parameter(name: 'v'),
+      parameters: [
+        Parameter(name: 'v$depth'),
       ],
       body: buildDeserializer(
-        'v',
+        'v$depth',
         namespace,
         type.nested,
         isLocal: isLocal,
+        depth: depth + 1,
       ),
     );
 
@@ -45,20 +53,21 @@ Builder buildDeserializer(
   if (type is MapTypeConfig) {
     final closure = Method(
       lambda: true,
-      parameters: const [
-        Parameter(name: 'k'),
-        Parameter(name: 'v'),
+      parameters: [
+        Parameter(name: 'k$depth'),
+        Parameter(name: 'v$depth'),
       ],
       // body: nested.deserializer('v'),
       body: invoke(
         const TypeReference('MapEntry', url: 'dart:core'),
         [
-          const Static('k'),
+          Static('k$depth'),
           buildDeserializer(
-            'v',
+            'v$depth',
             namespace,
             type.nested,
             isLocal: isLocal,
+            depth: depth + 1,
           ),
         ],
       ),
@@ -89,9 +98,10 @@ Builder buildDeserializer(
   }
 
   if (type is EnumTypeConfig) {
-    final ref = buildReference(namespace, type, isLocal: isLocal);
-
-    return Static('${ref.symbol}EnumMap') //
+    return TypeReference(
+      '${reference.symbol}EnumMap',
+      url: reference.url,
+    ) //
         .index(Static(name));
   }
 
