@@ -20,6 +20,7 @@ Builder buildSerializer(
   String namespace,
   TypeConfig type, {
   bool isLocal = false,
+  int depth = 0,
 }) {
   final reference = buildReference(
     namespace,
@@ -30,14 +31,15 @@ Builder buildSerializer(
   if (type is ArrayTypeConfig) {
     final closure = Method(
       lambda: true,
-      parameters: const [
-        Parameter(name: 'v'),
+      parameters: [
+        Parameter(name: 'v$depth'),
       ],
       body: buildSerializer(
-        'v',
+        'v$depth',
         namespace,
         type.nested,
         isLocal: isLocal,
+        depth: depth + 1,
       ),
     );
 
@@ -58,19 +60,20 @@ Builder buildSerializer(
   if (type is MapTypeConfig) {
     final closure = Method(
       lambda: true,
-      parameters: const [
-        Parameter(name: 'k'),
-        Parameter(name: 'v'),
+      parameters: [
+        Parameter(name: 'k$depth'),
+        Parameter(name: 'v$depth'),
       ],
       body: invoke(
         const TypeReference('MapEntry', url: 'dart:core'),
         [
-          const Static('k'),
+          Static('k$depth'),
           buildSerializer(
-            'v',
+            'v$depth',
             namespace,
             type.nested,
             isLocal: isLocal,
+            depth: depth + 1,
           ),
         ],
       ),
@@ -126,15 +129,18 @@ Builder buildSerializer(
 
     final filter = Method(
       lambda: true,
-      parameters: const [
-        Parameter(name: 'v'),
+      parameters: [
+        Parameter(name: 'v$depth'),
       ],
-      body: const Static('v') //
+      body: Static('v$depth') //
           .property('value')
           .equalTo(Static(name).as(string)),
     );
 
-    final closure = Static('${reference.symbol}EnumMap') //
+    final closure = TypeReference(
+      '${reference.symbol}EnumMap',
+      url: reference.url,
+    ) //
         .property('entries')
         .property('firstWhere')
         .invoke([filter]) //
