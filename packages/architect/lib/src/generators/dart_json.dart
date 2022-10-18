@@ -487,7 +487,7 @@ class DartJson extends Generator {
                 Parameter(
                   name: 'union',
                   type: TypeReference(
-                    'Union${n}Impl',
+                    'Union$n',
                     url: 'package:sealed_unions/sealed_unions.dart',
                     types: () sync* {
                       //
