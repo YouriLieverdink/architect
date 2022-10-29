@@ -620,11 +620,21 @@ class DartJson extends Generator {
                   condition: LiteralString(discriminator),
                   body: () {
                     //
-                    final selector = "json['$discriminator']";
+                    final a = () {
+                      //
+                      if (union.discriminator != null) {
+                        return typeDef.type is ModelTypeConfig //
+                            ? typeDef.serializer('json')
+                            : typeDef.serializer("json['value']");
+                      } //
+                      else {
+                        final selector = "json['$discriminator']";
 
-                    final a = typeDef.type is ModelTypeConfig //
-                        ? typeDef.serializer(selector)
-                        : typeDef.serializer("$selector['value']");
+                        return typeDef.type is ModelTypeConfig //
+                            ? typeDef.serializer(selector)
+                            : typeDef.serializer("$selector['value']");
+                      }
+                    }();
 
                     final b = const Static('factory') //
                         .property(factories[index])
@@ -679,19 +689,46 @@ class DartJson extends Generator {
           arguments.add(
             Method(
               parameters: const [
-                Parameter(name: 'v'),
+                Parameter(name: 'v0'),
               ],
               body: () {
                 //
                 final a = typeDef.type is ModelTypeConfig //
-                    ? typeDef.deserializer('v')
-                    : LiteralMap({
-                        Literal.of('value'): typeDef.deserializer('v'),
+                    ? typeDef.deserializer('v0')
+                    : Literal.of({
+                        Literal.of('value'): typeDef.deserializer('v0'),
                       });
 
-                final b = Literal.of({
-                  Literal.of(discriminator): a,
-                });
+                final b = () {
+                  //
+                  if (union.discriminator != null) {
+                    return LiteralSet({
+                      Literal.of(discriminator)
+                          .named("'${union.discriminator!}'"),
+                      a.spread,
+                    });
+                  } //
+                  else {
+                    return LiteralMap({
+                      Literal.of(discriminator): a,
+                    });
+                  }
+                }();
+
+                // final a = Literal.of({
+                //   LiteralString(discriminator)
+                //       .named("'${union.discriminator}'"),
+                //   typeDef.deserializer('v').spread,
+                // });
+                // final a = typeDef.type is ModelTypeConfig //
+                //     ? typeDef.deserializer('v')
+                //     : LiteralMap({
+                //         Literal.of('value'): typeDef.deserializer('v'),
+                //       });
+
+                // final b = Literal.of({
+                //   Literal.of(discriminator): a,
+                // });
 
                 return b //
                     .returned
