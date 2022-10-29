@@ -92,18 +92,23 @@ Builder buildSerializer(
   }
 
   if (type is PrimitiveTypeConfig) {
-    final string = TypeReference(
+    const string = TypeReference(
       'String',
       url: 'dart:core',
-      isNullable: type.isNullable,
     );
 
     switch (type.value) {
       case 'date-iso8601':
       case 'date-time-iso8601':
-        return const TypeReference('DateTime', url: 'dart:core')
-            .property(type.isNullable ? 'tryParse' : 'parse')
+        final closure = const TypeReference('DateTime', url: 'dart:core')
+            .property('parse')
             .invoke([Static(name).as(string)]);
+
+        return type.isNullable //
+            ? Static(name) //
+                .equalTo(Literal.of(null))
+                .conditional(Literal.of(null), closure)
+            : closure;
 
       default:
         return Static(name).as(reference);
