@@ -284,13 +284,7 @@ class DartClient extends Generator {
 
           var uri = const TypeReference('Uri', url: 'dart:core') //
               .property('parse')
-              .invoke([const Static('baseUrl')]);
-
-          if (path.isNotEmpty && path != '/') {
-            uri = uri //
-                .property('replace')
-                .invoke([Literal.of(path).named('path')]);
-          }
+              .invoke([Literal.of('\$baseUrl$path')]);
 
           if (query.isNotEmpty) {
             uri = uri //
