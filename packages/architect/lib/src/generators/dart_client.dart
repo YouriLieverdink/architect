@@ -184,11 +184,19 @@ class DartClient extends Generator {
         name.write(v.pascalCase);
       }
 
+      var index = 0;
+
       if (parameters.isNotEmpty) {
         name.write('By');
 
         for (final v in parameters) {
-          name.write(v![1]);
+          name.write('${v![1]}'.pascalCase);
+
+          index++;
+
+          if (index < parameters.length) {
+            name.write('And');
+          }
         }
       }
 
