@@ -163,13 +163,36 @@ class DartClient extends Generator {
     final name = () {
       //
       final method = operation.method.name.camelCase;
-      final match = RegExp(r':(\w+)').firstMatch(operation.path);
+      final parameter = RegExp(r':(\w+)');
 
-      if (match != null) {
-        return '$method-by-${match[1]}'.camelCase;
+      final resources = operation.path //
+          .split('/')
+          .where((v) => !parameter.hasMatch(v))
+          .skip(2);
+
+      final parameters = operation.path //
+          .split('/')
+          .where((v) => parameter.hasMatch(v))
+          .map((v) => parameter.firstMatch(v));
+
+      // We compose the name out of the method, resources, and parameters.
+      final name = StringBuffer();
+
+      name.write(method);
+
+      for (final v in resources) {
+        name.write(v.pascalCase);
       }
 
-      return method;
+      if (parameters.isNotEmpty) {
+        name.write('By');
+
+        for (final v in parameters) {
+          name.write(v![1]);
+        }
+      }
+
+      return '$name';
     }();
 
     return Method(
