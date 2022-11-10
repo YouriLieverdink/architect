@@ -38,8 +38,10 @@ class InvocationCommand extends Command {
           ..writeAsStringSync(file.contents);
       }
     } //
-    catch (e) {
-      stderr.writeln(e);
+    on List<i1.Error> catch (errors) {
+      for (final v in errors) {
+        stderr.writeln('Error: ${v.code}: ${v.message}');
+      }
     }
   }
 }
