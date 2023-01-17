@@ -75,6 +75,12 @@ class DartClient extends Generator {
         }
 
         yield _buildClient(context);
+
+        final responses = _buildResponses(context);
+
+        for (final v in responses) {
+          yield v;
+        }
       }(),
     );
   }
@@ -405,10 +411,16 @@ class DartClient extends Generator {
                         else {
                           yield invoke(
                             const TypeReference(
-                              'Exception',
-                              url: 'dart:core',
+                              'ClientErrorResponse',
                             ),
-                            [],
+                            [
+                              const Static('response')
+                                  .property('statusCode')
+                                  .named('status'),
+                              const Static('response')
+                                  .property('body')
+                                  .named('body'),
+                            ],
                           ).thrown.statement;
                         }
                       }
@@ -421,10 +433,16 @@ class DartClient extends Generator {
               //
               return invoke(
                 const TypeReference(
-                  'Exception',
-                  url: 'dart:core',
+                  'ClientErrorResponse',
                 ),
-                [],
+                [
+                  const Static('response') //
+                      .property('statusCode')
+                      .named('status'),
+                  const Static('response') //
+                      .property('body')
+                      .named('body'),
+                ],
               ).thrown.statement;
             }(),
           );
@@ -521,5 +539,51 @@ class DartClient extends Generator {
         }
       }(),
     );
+  }
+
+  Iterable<Class> _buildResponses(
+    BuildContext context,
+  ) {
+    return () sync* {
+      yield Class(
+        name: 'ClientErrorResponse',
+        implements: const [
+          TypeReference('Exception', url: 'dart:core'),
+        ],
+        constructors: () sync* {
+          yield Constructor(
+            isConst: true,
+            parameters: () sync* {
+              yield const Parameter(
+                name: 'status',
+                isRequired: true,
+                isToThis: true,
+                kind: ParameterKind.named,
+              );
+
+              yield const Parameter(
+                name: 'body',
+                isRequired: true,
+                isToThis: true,
+                kind: ParameterKind.named,
+              );
+            }(),
+          );
+        }(),
+        fields: () sync* {
+          yield const Field(
+            name: 'status',
+            modifier: FieldModifier.final_,
+            type: TypeReference('int', url: 'dart:core'),
+          );
+
+          yield const Field(
+            name: 'body',
+            modifier: FieldModifier.final_,
+            type: TypeReference('dynamic', url: 'dart:core'),
+          );
+        }(),
+      );
+    }();
   }
 }
