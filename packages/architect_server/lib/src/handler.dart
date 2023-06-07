@@ -8,9 +8,10 @@ Handler handler() {
   handler.use(setContentType('application/json'));
   handler.use(logRequests());
 
-  return handler //
-    ..get('/_internal_/healthcheck', HealthcheckController.get)
-    ..post('/invocations/<key>', InvocationController.postByKey)
-    ..get('/generators', GeneratorController.get)
-    ..get('/generators/<key>', GeneratorController.getByKey);
+  return (handler //
+        ..get('/_internal_/healthcheck', HealthcheckController.get)
+        ..post('/invocations/<key>', InvocationController.postByKey)
+        ..get('/generators', GeneratorController.get)
+        ..get('/generators/<key>', GeneratorController.getByKey))
+      .call;
 }

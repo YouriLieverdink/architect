@@ -12,4 +12,4 @@ final addMessage = CreateAddMessage(client);
 const listGenerators = CreateListGenerators(generators);
 const showGenerator = CreateShowGenerator(generators);
 const showHealthcheck = CreateShowHealthcheck();
-final addInvocation = CreateAddInvocation(showGenerator, addMessage);
+final addInvocation = CreateAddInvocation(showGenerator.call, addMessage.call);

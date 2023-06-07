@@ -710,7 +710,8 @@ class DartJson extends Generator {
                   //
                   if (union.discriminator != null) {
                     return LiteralSet({
-                      Literal.of(discriminator).named("'${union.discriminator!}'"),
+                      Literal.of(discriminator)
+                          .named("'${union.discriminator!}'"),
                       a.spread,
                     });
                   } //
