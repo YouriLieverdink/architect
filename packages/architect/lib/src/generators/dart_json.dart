@@ -97,10 +97,17 @@ class DartJson extends Generator {
 
     for (final v in enum_.values) {
       final name = getName(v.name);
+      final value = v.value;
 
-      arguments.addAll({
-        enumDef.reference.property(name): Literal.of(v.name),
-      });
+      if (value != null) {
+        arguments.addAll({
+          enumDef.reference.property(name): Literal.of(value),
+        });
+      } else {
+        arguments.addAll({
+          enumDef.reference.property(name): Literal.of(v.name),
+        });
+      }
     }
 
     return Static('${enumDef.reference.symbol}EnumMap')
