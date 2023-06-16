@@ -268,9 +268,17 @@ class DartClient extends Generator {
             kind: ParameterKind.named,
             isRequired: v.required && v.default_ == null,
             assign: () {
-              //
               if (v.default_ != null) {
-                return Static(v.default_!);
+                switch (v.type) {
+                  case 'string':
+                    return LiteralString(v.default_!);
+                  case 'int':
+                  case 'long':
+                    return LiteralNum(int.parse(v.default_!));
+                  case 'double':
+                  case 'decimal':
+                    return LiteralNum(double.parse(v.default_!));
+                }
               }
             }(),
             annotations: () sync* {
