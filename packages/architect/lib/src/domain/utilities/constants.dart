@@ -5,5 +5,5 @@ const unions = [
 
 const factories = [
   'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth',
-  'ninth' //
+  'ninth', //
 ];
