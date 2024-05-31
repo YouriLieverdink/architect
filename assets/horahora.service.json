@@ -1,0 +1,533 @@
+{
+  "name": "horahora",
+  "organization": { "key": "iruoy" },
+  "application": { "key": "horahora" },
+  "namespace": "nl.iruoy.horahora.v0",
+  "version": "0.1.0-dev.2",
+  "info": {},
+  "headers": [],
+  "imports": [],
+  "enums": [],
+  "interfaces": [],
+  "unions": [],
+  "models": [
+    {
+      "name": "error",
+      "plural": "errors",
+      "fields": [
+        {
+          "name": "code",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "export_form",
+      "plural": "export_forms",
+      "fields": [
+        {
+          "name": "jobId",
+          "type": "string",
+          "required": false,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "body",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "healthcheck",
+      "plural": "healthchecks",
+      "fields": [
+        {
+          "name": "status",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "job",
+      "plural": "jobs",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "job_form",
+      "plural": "job_forms",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "record",
+      "plural": "records",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "start",
+          "type": "date-time-iso8601",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "end",
+          "type": "date-time-iso8601",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "jobId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "record_form",
+      "plural": "record_forms",
+      "fields": [
+        {
+          "name": "start",
+          "type": "date-time-iso8601",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "end",
+          "type": "date-time-iso8601",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "jobId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "session",
+      "plural": "sessions",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "start",
+          "type": "date-time-iso8601",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "userId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "jobId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "session_form",
+      "plural": "session_forms",
+      "fields": [
+        {
+          "name": "jobId",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    },
+    {
+      "name": "user",
+      "plural": "users",
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        },
+        {
+          "name": "token",
+          "type": "string",
+          "required": true,
+          "attributes": [],
+          "annotations": []
+        }
+      ],
+      "attributes": [],
+      "interfaces": []
+    }
+  ],
+  "resources": [
+    {
+      "type": "healthcheck",
+      "plural": "healthchecks",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/_internal_/healthcheck",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "healthcheck",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 500 } },
+              "type": "[error]",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        }
+      ],
+      "attributes": [],
+      "path": "/_internal_/healthcheck"
+    },
+    {
+      "type": "job",
+      "plural": "jobs",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/jobs",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "[job]",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        },
+        {
+          "method": "POST",
+          "path": "/jobs",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 201 } },
+              "type": "job",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 400 } },
+              "type": "[error]",
+              "attributes": []
+            }
+          ],
+          "attributes": [],
+          "body": { "type": "job_form", "attributes": [] }
+        },
+        {
+          "method": "PUT",
+          "path": "/jobs/:id",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string",
+              "location": "Path",
+              "required": true
+            }
+          ],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "job",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 400 } },
+              "type": "[error]",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 404 } },
+              "type": "unit",
+              "attributes": []
+            }
+          ],
+          "attributes": [],
+          "body": { "type": "job_form", "attributes": [] }
+        },
+        {
+          "method": "DELETE",
+          "path": "/jobs/:id",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string",
+              "location": "Path",
+              "required": true
+            }
+          ],
+          "responses": [
+            {
+              "code": { "integer": { "value": 204 } },
+              "type": "unit",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 404 } },
+              "type": "unit",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        }
+      ],
+      "attributes": [],
+      "path": "/jobs"
+    },
+    {
+      "type": "record",
+      "plural": "records",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/records/:from/:to",
+          "parameters": [
+            {
+              "name": "from",
+              "type": "string",
+              "location": "Path",
+              "required": true
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "location": "Path",
+              "required": true
+            },
+            {
+              "name": "jobId",
+              "type": "string",
+              "location": "Query",
+              "required": false
+            }
+          ],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "[record]",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        },
+        {
+          "method": "POST",
+          "path": "/records",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 201 } },
+              "type": "record",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 400 } },
+              "type": "[error]",
+              "attributes": []
+            }
+          ],
+          "attributes": [],
+          "body": { "type": "record_form", "attributes": [] }
+        }
+      ],
+      "attributes": [],
+      "path": "/records"
+    },
+    {
+      "type": "session",
+      "plural": "sessions",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/sessions",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "[session]",
+              "attributes": []
+            }
+          ],
+          "attributes": []
+        },
+        {
+          "method": "POST",
+          "path": "/sessions/start",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 201 } },
+              "type": "session",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 404 } },
+              "type": "[error]",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 409 } },
+              "type": "[error]",
+              "attributes": []
+            }
+          ],
+          "attributes": [],
+          "body": { "type": "session_form", "attributes": [] }
+        },
+        {
+          "method": "POST",
+          "path": "/sessions/stop",
+          "parameters": [],
+          "responses": [
+            {
+              "code": { "integer": { "value": 200 } },
+              "type": "session",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 404 } },
+              "type": "[error]",
+              "attributes": []
+            },
+            {
+              "code": { "integer": { "value": 409 } },
+              "type": "[error]",
+              "attributes": []
+            }
+          ],
+          "attributes": [],
+          "body": { "type": "session_form", "attributes": [] }
+        }
+      ],
+      "attributes": [],
+      "path": "/sessions"
+    }
+  ],
+  "attributes": [],
+  "annotations": [],
+  "apidoc": { "version": "1.0.0" },
+  "description": "Simple mobile application to keep track of worked hours."
+}

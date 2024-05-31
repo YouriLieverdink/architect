@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json.schemastore.org/apibuilder.json",
+  "name": "horahora",
+  "description": "Simple mobile application to keep track of worked hours.",
+  "models": {
+    "healthcheck": {
+      "fields": [
+        {
+          "name": "status",
+          "type": "string"
+        }
+      ]
+    },
+    "error": {
+      "fields": [
+        {
+          "name": "code",
+          "type": "string"
+        },
+        {
+          "name": "message",
+          "type": "string"
+        }
+      ]
+    },
+    "job": {
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    "job_form": {
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    "record": {
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string"
+        },
+        {
+          "name": "start",
+          "type": "date-time-iso8601"
+        },
+        {
+          "name": "end",
+          "type": "date-time-iso8601"
+        },
+        {
+          "name": "userId",
+          "type": "string"
+        },
+        {
+          "name": "jobId",
+          "type": "string"
+        }
+      ]
+    },
+    "record_form": {
+      "fields": [
+        {
+          "name": "start",
+          "type": "date-time-iso8601"
+        },
+        {
+          "name": "end",
+          "type": "date-time-iso8601"
+        },
+        {
+          "name": "jobId",
+          "type": "string"
+        }
+      ]
+    },
+    "session": {
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string"
+        },
+        {
+          "name": "start",
+          "type": "date-time-iso8601"
+        },
+        {
+          "name": "userId",
+          "type": "string"
+        },
+        {
+          "name": "jobId",
+          "type": "string"
+        }
+      ]
+    },
+    "session_form": {
+      "fields": [
+        {
+          "name": "jobId",
+          "type": "string"
+        }
+      ]
+    },
+    "user": {
+      "fields": [
+        {
+          "name": "_id",
+          "type": "string"
+        },
+        {
+          "name": "token",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "resources": {
+    "healthcheck": {
+      "path": "/_internal_/healthcheck",
+      "operations": [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "healthcheck"
+            },
+            "500": {
+              "type": "[error]"
+            }
+          }
+        }
+      ]
+    },
+    "job": {
+      "path": "/jobs",
+      "operations": [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "[job]"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "body": {
+            "type": "job_form"
+          },
+          "responses": {
+            "201": {
+              "type": "job"
+            },
+            "400": {
+              "type": "[error]"
+            }
+          }
+        },
+        {
+          "method": "PUT",
+          "path": "/:id",
+          "body": {
+            "type": "job_form"
+          },
+          "responses": {
+            "200": {
+              "type": "job"
+            },
+            "400": {
+              "type": "[error]"
+            },
+            "404": {
+              "type": "unit"
+            }
+          }
+        },
+        {
+          "method": "DELETE",
+          "path": "/:id",
+          "responses": {
+            "204": {
+              "type": "unit"
+            },
+            "404": {
+              "type": "unit"
+            }
+          }
+        }
+      ]
+    },
+    "record": {
+      "path": "/records",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/:from/:to",
+          "parameters": [
+            {
+              "name": "jobId",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "type": "[record]"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "body": {
+            "type": "record_form"
+          },
+          "responses": {
+            "201": {
+              "type": "record"
+            },
+            "400": {
+              "type": "[error]"
+            }
+          }
+        }
+      ]
+    },
+    "session": {
+      "path": "/sessions",
+      "operations": [
+        {
+          "method": "GET",
+          "responses": {
+            "200": {
+              "type": "[session]"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/start",
+          "body": {
+            "type": "session_form"
+          },
+          "responses": {
+            "201": {
+              "type": "session"
+            },
+            "404": {
+              "type": "[error]"
+            },
+            "409": {
+              "type": "[error]"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/stop",
+          "body": {
+            "type": "session_form"
+          },
+          "responses": {
+            "200": {
+              "type": "session"
+            },
+            "404": {
+              "type": "[error]"
+            },
+            "409": {
+              "type": "[error]"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
